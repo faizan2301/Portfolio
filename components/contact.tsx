@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { useRef, useState } from "react"
-import { motion, useInView } from "framer-motion"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import { useToast } from "@/hooks/use-toast"
-import { MapPin, Mail, Phone } from "lucide-react"
-
+import { useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { MapPin, Mail, Phone } from "lucide-react";
+import emailjs from "@emailjs/browser";
 export default function Contact() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const { toast } = useToast()
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -23,7 +23,7 @@ export default function Contact() {
         staggerChildren: 0.2,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -32,23 +32,53 @@ export default function Contact() {
       y: 0,
       transition: { duration: 0.5 },
     },
-  }
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const templateParams = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      subject: formData.get("subject"),
+      message: formData.get("message"),
+    };
+    try {
+      await emailjs.send(
+        process.env.YOUR_SERVICE_ID ?? "",
+        process.env.YOUR_PUBLIC_KEY ?? "",
+        templateParams,
+        process.env.YOUR_TEMPLATE_ID ?? ""
+      );
+
+      toast({
+        title: "Message sent!",
+        description: "Thank you for your message. I'll get back to you soon.",
+      });
+
+      form.reset();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
 
     toast({
       title: "Message sent!",
       description: "Thank you for your message. I'll get back to you soon.",
-    })
+    });
 
-    e.target.reset()
-    setIsSubmitting(false)
-  }
+    e.target.reset();
+    setIsSubmitting(false);
+  };
 
   const contactInfo = [
     {
@@ -69,7 +99,7 @@ export default function Contact() {
       value: "India",
       link: null,
     },
-  ]
+  ];
 
   return (
     <section id="contact" className="py-20 bg-muted/30">
@@ -85,8 +115,9 @@ export default function Contact() {
             <h2 className="text-3xl font-bold mb-4">Get In Touch</h2>
             <div className="h-1 w-20 bg-primary mx-auto mb-6"></div>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Feel free to reach out to me for any inquiries, collaboration opportunities, or just to say hello. I'll
-              get back to you as soon as possible.
+              Feel free to reach out to me for any inquiries, collaboration
+              opportunities, or just to say hello. I'll get back to you as soon
+              as possible.
             </p>
           </motion.div>
 
@@ -94,19 +125,28 @@ export default function Contact() {
             <motion.div variants={itemVariants} className="md:col-span-1">
               <Card className="h-full">
                 <CardContent className="pt-6">
-                  <h3 className="text-xl font-medium mb-6">Contact Information</h3>
+                  <h3 className="text-xl font-medium mb-6">
+                    Contact Information
+                  </h3>
                   <div className="space-y-6">
                     {contactInfo.map((info, index) => (
                       <div key={index} className="flex items-start gap-4">
-                        <div className="p-2 bg-primary/10 rounded-full">{info.icon}</div>
+                        <div className="p-2 bg-primary/10 rounded-full">
+                          {info.icon}
+                        </div>
                         <div>
                           <h4 className="font-medium">{info.title}</h4>
                           {info.link ? (
-                            <a href={info.link} className="text-muted-foreground hover:text-primary transition-colors">
+                            <a
+                              href={info.link}
+                              className="text-muted-foreground hover:text-primary transition-colors"
+                            >
                               {info.value}
                             </a>
                           ) : (
-                            <p className="text-muted-foreground">{info.value}</p>
+                            <p className="text-muted-foreground">
+                              {info.value}
+                            </p>
                           )}
                         </div>
                       </div>
@@ -119,7 +159,9 @@ export default function Contact() {
             <motion.div variants={itemVariants} className="md:col-span-2">
               <Card className="h-full">
                 <CardContent className="pt-6">
-                  <h3 className="text-xl font-medium mb-6">Send Me a Message</h3>
+                  <h3 className="text-xl font-medium mb-6">
+                    Send Me a Message
+                  </h3>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
@@ -132,7 +174,12 @@ export default function Contact() {
                         <label htmlFor="email" className="text-sm font-medium">
                           Email
                         </label>
-                        <Input id="email" type="email" placeholder="Your email" required />
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="Your email"
+                          required
+                        />
                       </div>
                     </div>
                     <div className="space-y-2">
@@ -145,9 +192,18 @@ export default function Contact() {
                       <label htmlFor="message" className="text-sm font-medium">
                         Message
                       </label>
-                      <Textarea id="message" placeholder="Your message" rows={5} required />
+                      <Textarea
+                        id="message"
+                        placeholder="Your message"
+                        rows={5}
+                        required
+                      />
                     </div>
-                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={isSubmitting}
+                    >
                       {isSubmitting ? "Sending..." : "Send Message"}
                     </Button>
                   </form>
@@ -158,6 +214,5 @@ export default function Contact() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }
-
