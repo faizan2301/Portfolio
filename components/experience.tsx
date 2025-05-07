@@ -30,6 +30,13 @@ export default function Experience() {
 
   const experiences = [
     {
+      title: "Frontend Engineer",
+      company: "Khedmah delivery",
+      period: "2025 - Present",
+      description: [],
+      icon: <BriefcaseIcon className="h-5 w-5" />,
+    },
+    {
       title: "Sr. Mobile Application Developer",
       company: "Moksha Solutions",
       period: "2022 - 2025",
@@ -43,13 +50,7 @@ export default function Experience() {
       ],
       icon: <BriefcaseIcon className="h-5 w-5" />,
     },
-    {
-      title: "Frontend Engineer",
-      company: "Khedmah delivery",
-      period: "2025 - Present",
-      description: [],
-      icon: <BriefcaseIcon className="h-5 w-5" />,
-    },
+    
   ]
 
   const education = [
