@@ -32,7 +32,7 @@ export default function Experience() {
     {
       title: "Sr. Mobile Application Developer",
       company: "Moksha Solutions",
-      period: "2022 - Present",
+      period: "2022 - 2025",
       description: [
         "Led mobile application development projects, utilizing Java, Flutter, Dart, and React Native to create robust and user-friendly apps.",
         "Collaborate with cross-functional teams to integrate Node.js backend solutions, ensuring seamless functionality and performance.",
@@ -41,6 +41,13 @@ export default function Experience() {
         "Serve as a primary point of contact for client communication, addressing inquiries, providing updates, and ensuring alignment between project objectives and client expectations.",
         "Employ a versatile tech stack encompassing Java, Flutter, Dart, React Native, Node.js, JavaScript, and TypeScript to deliver comprehensive mobile app solutions and robust backend infrastructure.",
       ],
+      icon: <BriefcaseIcon className="h-5 w-5" />,
+    },
+    {
+      title: "Frontend Engineer",
+      company: "Khedmah delivery",
+      period: "2025 - Present",
+      description: [],
       icon: <BriefcaseIcon className="h-5 w-5" />,
     },
   ]
