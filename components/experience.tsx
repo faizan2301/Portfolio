@@ -33,7 +33,16 @@ export default function Experience() {
       title: "Frontend Engineer",
       company: "Khedmah delivery",
       period: "2025 - Present",
-      description: [],
+      description: [
+        "Develop and maintain React Native applications for a comprehensive food delivery ecosystem, including customer food ordering app, driver delivery app, and vendor management app.",
+        "Implement responsive UI/UX designs with smooth animations and intuitive user interfaces across all three mobile applications.",
+        "Integrate real-time features including live order tracking, push notifications, and instant messaging between customers, drivers, and vendors.",
+        "Optimize app performance and user experience through efficient state management, code splitting, and lazy loading techniques.",
+        "Collaborate with backend teams to integrate RESTful APIs and WebSocket connections for real-time order updates and status changes.",
+        "Ensure cross-platform compatibility and consistent functionality across iOS and Android devices using React Native best practices.",
+        "Implement secure payment processing, user authentication, and data validation to maintain high security standards.",
+        "Conduct thorough testing and debugging to ensure bug-free releases and optimal app performance in production environments.",
+      ],
       icon: <BriefcaseIcon className="h-5 w-5" />,
     },
     {
