@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Download, Sparkles } from "lucide-react";
+import InteractiveKeyboard from "./interactive-keyboard";
 
 // Generate deterministic particle data based on index
 function generateParticleData(index: number) {
@@ -270,19 +271,29 @@ export default function Hero() {
           </motion.a>
         </motion.div>
 
+        {/* Interactive Keyboard */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 1.4 }}
+          className="mt-16 flex justify-center"
+        >
+          <InteractiveKeyboard />
+        </motion.div>
+
         {/* Tech Stack Preview */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1.5 }}
-          className="mt-16 flex flex-wrap items-center justify-center gap-6"
+          transition={{ duration: 0.5, delay: 1.8 }}
+          className="mt-12 flex flex-wrap items-center justify-center gap-6"
         >
           {["Flutter", "React Native", "TypeScript", "Node.js", "Firebase"].map((tech, i) => (
             <motion.span
               key={tech}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.6 + i * 0.1 }}
+              transition={{ delay: 1.9 + i * 0.1 }}
               className="px-4 py-2 text-sm font-medium text-muted-foreground glass rounded-full"
             >
               {tech}
