@@ -34,9 +34,9 @@ function Key({ label, sublabel, color = "default", size = "md", delay = 0 }: Key
   }, []);
 
   const sizeClasses = {
-    sm: "w-14 h-14",
-    md: "w-20 h-20",
-    lg: "w-28 h-20",
+    sm: "w-10 h-10 sm:w-14 sm:h-14",
+    md: "w-14 h-14 sm:w-20 sm:h-20",
+    lg: "w-20 h-14 sm:w-28 sm:h-20",
   };
 
   const colorStyles = {
@@ -147,7 +147,7 @@ function Key({ label, sublabel, color = "default", size = "md", delay = 0 }: Key
           ${color === "gradient" || color === "primary" || color === "accent" 
             ? "text-white" 
             : "text-gray-300"}
-          ${size === "sm" ? "text-xs" : size === "lg" ? "text-sm" : "text-sm"}
+          ${size === "sm" ? "text-[10px] sm:text-xs" : size === "lg" ? "text-xs sm:text-sm" : "text-xs sm:text-sm"}
         `}
         style={{
           transform: isMounted && isPressed ? "translateY(2px) scale(0.95)" : "translateY(0) scale(1)",
@@ -223,7 +223,7 @@ function Mascot() {
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-      className="absolute -top-2 -left-2 w-16 h-16"
+      className="absolute -top-2 -left-2 w-12 h-12 sm:w-16 sm:h-16 hidden sm:block"
     >
       <motion.div
         className="relative w-full h-full"
@@ -231,7 +231,7 @@ function Mascot() {
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       >
         {/* Face */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-200 to-gray-300 rounded-full shadow-lg">
+        <div className="absolute inset-0 bg-linear-to-b from-gray-200 to-gray-300 rounded-full shadow-lg">
           {/* Ears */}
           <div className="absolute -top-1 left-1 w-4 h-4 bg-gray-300 rounded-full shadow-inner" />
           <div className="absolute -top-1 right-1 w-4 h-4 bg-gray-300 rounded-full shadow-inner" />
@@ -287,7 +287,7 @@ export default function InteractiveKeyboard() {
       
       {/* Keyboard container */}
       <motion.div
-        className="relative p-6 rounded-2xl"
+        className="relative p-3 sm:p-6 rounded-2xl"
         style={{
           background: "linear-gradient(145deg, #1a1a28 0%, #12121a 100%)",
           boxShadow: `

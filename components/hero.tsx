@@ -76,7 +76,7 @@ function GradientOrbs() {
   return (
     <>
       <motion.div
-        className="absolute -top-40 -left-40 w-96 h-96 rounded-full opacity-30 blur-3xl"
+        className="absolute -top-20 sm:-top-40 -left-20 sm:-left-40 w-48 sm:w-96 h-48 sm:h-96 rounded-full opacity-30 blur-3xl"
         style={{
           background: "radial-gradient(circle, #06b6d4 0%, transparent 70%)",
         }}
@@ -92,7 +92,7 @@ function GradientOrbs() {
         }}
       />
       <motion.div
-        className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full opacity-30 blur-3xl"
+        className="absolute -bottom-20 sm:-bottom-40 -right-20 sm:-right-40 w-48 sm:w-96 h-48 sm:h-96 rounded-full opacity-30 blur-3xl"
         style={{
           background: "radial-gradient(circle, #8b5cf6 0%, transparent 70%)",
         }}
@@ -108,7 +108,7 @@ function GradientOrbs() {
         }}
       />
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-20 blur-3xl"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] rounded-full opacity-20 blur-3xl"
         style={{
           background: "radial-gradient(circle, #ec4899 0%, transparent 70%)",
         }}
@@ -180,23 +180,23 @@ export default function Hero() {
       <FloatingParticles />
       <GradientOrbs />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center pt-20 sm:pt-0">
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8"
+          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass mb-6 sm:mb-8"
         >
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-sm font-medium text-muted-foreground">
+          <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-primary" />
+          <span className="text-xs sm:text-sm font-medium text-muted-foreground">
             Available for new opportunities
           </span>
         </motion.div>
 
         {/* Main Heading */}
         <motion.h1
-          className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-6"
+          className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 sm:mb-6"
           style={{
             transform: "translate(var(--mouse-x, 0), var(--mouse-y, 0))",
           }}
@@ -212,7 +212,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.8 }}
-          className="text-xl sm:text-2xl md:text-3xl text-muted-foreground mb-4"
+          className="text-lg sm:text-2xl md:text-3xl text-muted-foreground mb-3 sm:mb-4"
         >
           Frontend Engineer & Mobile Developer
         </motion.p>
@@ -222,7 +222,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1 }}
-          className="text-base sm:text-lg text-muted-foreground/80 max-w-2xl mx-auto mb-10"
+          className="text-sm sm:text-lg text-muted-foreground/80 max-w-2xl mx-auto mb-8 sm:mb-10 px-2 sm:px-0"
         >
           Crafting seamless mobile experiences with{" "}
           <span className="text-primary">Flutter</span>,{" "}
@@ -235,7 +235,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1.2 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
         >
           <motion.a
             href="#projects"
@@ -243,12 +243,12 @@ export default function Hero() {
               e.preventDefault();
               document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="group relative px-8 py-4 rounded-full overflow-hidden"
+            className="group relative px-6 sm:px-8 py-3 sm:py-4 rounded-full overflow-hidden w-full sm:w-auto"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <span className="absolute inset-0 animated-gradient" />
-            <span className="relative flex items-center gap-2 font-semibold text-white">
+            <span className="relative flex items-center justify-center gap-2 font-semibold text-white text-sm sm:text-base">
               View My Work
               <motion.span
                 animate={{ x: [0, 5, 0] }}
@@ -262,7 +262,7 @@ export default function Hero() {
           <motion.a
             href="/MohammadFaizanResume.pdf"
             download
-            className="group px-8 py-4 rounded-full border border-border hover:border-primary/50 transition-colors flex items-center gap-2 font-medium text-muted-foreground hover:text-foreground"
+            className="group px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-border hover:border-primary/50 transition-colors flex items-center justify-center gap-2 font-medium text-muted-foreground hover:text-foreground w-full sm:w-auto text-sm sm:text-base"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -276,7 +276,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 1.4 }}
-          className="mt-16 flex justify-center"
+          className="mt-10 sm:mt-16 flex justify-center"
         >
           <InteractiveKeyboard />
         </motion.div>
@@ -286,7 +286,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 1.8 }}
-          className="mt-12 flex flex-wrap items-center justify-center gap-6"
+          className="mt-8 sm:mt-12 flex flex-wrap items-center justify-center gap-2 sm:gap-6 px-2"
         >
           {["Flutter", "React Native", "TypeScript", "Node.js", "Firebase"].map((tech, i) => (
             <motion.span
@@ -294,7 +294,7 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.9 + i * 0.1 }}
-              className="px-4 py-2 text-sm font-medium text-muted-foreground glass rounded-full"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-muted-foreground glass rounded-full"
             >
               {tech}
             </motion.span>
@@ -308,7 +308,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+        className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
         aria-label="Scroll to about section"
       >
         <span className="text-sm font-medium">Scroll</span>

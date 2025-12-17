@@ -131,7 +131,20 @@ body {
 
 /* Smooth section transitions */
 section {
-  scroll-margin-top: 80px;
+  scroll-margin-top: 60px;
+}
+
+@media (min-width: 640px) {
+  section {
+    scroll-margin-top: 80px;
+  }
+}
+
+/* Hide scrollbar on mobile for better experience */
+@media (max-width: 639px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
 }
 
 /* Selection color */

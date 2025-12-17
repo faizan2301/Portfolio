@@ -89,7 +89,7 @@ export default function Skills() {
   };
 
   return (
-    <section id="skills" className="py-24 sm:py-32 relative">
+    <section id="skills" className="py-16 sm:py-24 md:py-32 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent" />
       
       <motion.div
@@ -97,41 +97,41 @@ export default function Skills() {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="max-w-6xl mx-auto px-6 relative z-10"
+        className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10"
       >
         {/* Section Header */}
-        <motion.div variants={itemVariants} className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 text-sm font-medium text-primary bg-primary/10 rounded-full mb-4">
+        <motion.div variants={itemVariants} className="text-center mb-10 sm:mb-16">
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-primary bg-primary/10 rounded-full mb-3 sm:mb-4">
             Tech Stack
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
             Skills &{" "}
             <span className="gradient-text">Technologies</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-sm sm:text-lg max-w-2xl mx-auto px-2 sm:px-0">
             A comprehensive toolkit for building modern applications
           </p>
         </motion.div>
 
         {/* Skills Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {skillCategories.map((category, index) => (
             <motion.div
               key={category.title}
               variants={itemVariants}
               whileHover={{ y: -4, scale: 1.02 }}
-              className="glass rounded-2xl p-6 group cursor-default"
+              className="glass rounded-xl sm:rounded-2xl p-4 sm:p-6 group cursor-default"
             >
               {/* Header */}
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center`}>
-                  <category.icon size={20} className="text-white" />
+              <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
+                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center`}>
+                  <category.icon size={16} className="sm:w-5 sm:h-5 text-white" />
                 </div>
-                <h3 className="font-semibold">{category.title}</h3>
+                <h3 className="font-semibold text-sm sm:text-base">{category.title}</h3>
               </div>
 
               {/* Skills */}
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {category.skills.map((skill, skillIndex) => (
                   <motion.span
                     key={skill}
@@ -139,7 +139,7 @@ export default function Skills() {
                     animate={isInView ? { opacity: 1, scale: 1 } : {}}
                     transition={{ delay: 0.3 + index * 0.1 + skillIndex * 0.05 }}
                     whileHover={{ scale: 1.05 }}
-                    className="px-3 py-1.5 text-sm bg-muted rounded-full text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-colors cursor-default"
+                    className="px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm bg-muted rounded-full text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-colors cursor-default"
                   >
                     {skill}
                   </motion.span>
@@ -150,12 +150,12 @@ export default function Skills() {
         </div>
 
         {/* Additional Skills */}
-        <motion.div variants={itemVariants} className="glass rounded-2xl p-8">
-          <div className="flex items-center gap-3 mb-6">
-            <Zap className="text-primary" size={24} />
-            <h3 className="font-semibold text-lg">Additional Expertise</h3>
+        <motion.div variants={itemVariants} className="glass rounded-xl sm:rounded-2xl p-4 sm:p-8">
+          <div className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-6">
+            <Zap className="text-primary w-5 h-5 sm:w-6 sm:h-6" />
+            <h3 className="font-semibold text-base sm:text-lg">Additional Expertise</h3>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             {additionalSkills.map((skill, index) => (
               <motion.span
                 key={skill}
@@ -163,7 +163,7 @@ export default function Skills() {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.5 + index * 0.05 }}
                 whileHover={{ scale: 1.05, y: -2 }}
-                className="px-4 py-2 text-sm font-medium border border-border rounded-full text-muted-foreground hover:text-primary hover:border-primary/50 transition-all cursor-default"
+                className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium border border-border rounded-full text-muted-foreground hover:text-primary hover:border-primary/50 transition-all cursor-default"
               >
                 {skill}
               </motion.span>
@@ -172,7 +172,7 @@ export default function Skills() {
         </motion.div>
 
         {/* Decorative Elements */}
-        <div className="mt-16 flex justify-center gap-8 text-muted-foreground/30">
+        <div className="mt-10 sm:mt-16 flex justify-center gap-6 sm:gap-8 text-muted-foreground/30">
           {[Workflow, Cloud, Layout].map((Icon, i) => (
             <motion.div
               key={i}
@@ -186,7 +186,7 @@ export default function Skills() {
                 delay: i * 0.5,
               }}
             >
-              <Icon size={40} />
+              <Icon size={28} className="sm:w-10 sm:h-10" />
             </motion.div>
           ))}
         </div>

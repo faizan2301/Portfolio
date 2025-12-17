@@ -94,7 +94,7 @@ export default function Projects() {
   };
 
   return (
-    <section id="projects" className="py-24 sm:py-32 relative overflow-hidden">
+    <section id="projects" className="py-16 sm:py-24 md:py-32 relative overflow-hidden">
       <div className="absolute inset-0 grid-pattern opacity-30" />
       
       <motion.div
@@ -102,24 +102,24 @@ export default function Projects() {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="max-w-7xl mx-auto px-6 relative z-10"
+        className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10"
       >
         {/* Section Header */}
-        <motion.div variants={itemVariants} className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 text-sm font-medium text-primary bg-primary/10 rounded-full mb-4">
+        <motion.div variants={itemVariants} className="text-center mb-10 sm:mb-16">
+          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-primary bg-primary/10 rounded-full mb-3 sm:mb-4">
             Portfolio
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
             Featured{" "}
             <span className="gradient-text">Projects</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-sm sm:text-lg max-w-2xl mx-auto px-2 sm:px-0">
             A showcase of mobile and web applications I&apos;ve built and contributed to
           </p>
         </motion.div>
 
         {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {displayedProjects.map((project, index) => (
             <motion.div
               key={project.title}
@@ -127,31 +127,31 @@ export default function Projects() {
               whileHover={{ y: -8 }}
               className="group"
             >
-              <div className="h-full glass rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/30">
+              <div className="h-full glass rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/30">
                 {/* Gradient Header */}
-                <div className={`h-2 bg-gradient-to-r ${project.gradient}`} />
+                <div className={`h-1.5 sm:h-2 bg-gradient-to-r ${project.gradient}`} />
                 
-                <div className="p-6">
+                <div className="p-4 sm:p-6">
                   {/* Title & Links */}
-                  <div className="flex items-start justify-between gap-4 mb-4">
+                  <div className="flex items-start justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
                     <div>
-                      <h3 className="text-xl font-bold mb-1 group-hover:text-primary transition-colors">
+                      <h3 className="text-base sm:text-xl font-bold mb-1 group-hover:text-primary transition-colors">
                         {project.title}
                       </h3>
                       {project.featured && (
-                        <span className="text-xs font-medium text-accent">Featured Project</span>
+                        <span className="text-[10px] sm:text-xs font-medium text-accent">Featured Project</span>
                       )}
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1.5 sm:gap-2 shrink-0">
                       {project.playStore && (
                         <a
                           href={project.playStore}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 rounded-lg bg-muted hover:bg-primary/20 transition-colors"
+                          className="p-1.5 sm:p-2 rounded-lg bg-muted hover:bg-primary/20 transition-colors"
                           aria-label="Play Store"
                         >
-                          <Play size={16} className="text-muted-foreground group-hover:text-primary" />
+                          <Play size={14} className="sm:w-4 sm:h-4 text-muted-foreground group-hover:text-primary" />
                         </a>
                       )}
                       {project.appStore && (
@@ -159,36 +159,36 @@ export default function Projects() {
                           href={project.appStore}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 rounded-lg bg-muted hover:bg-primary/20 transition-colors"
+                          className="p-1.5 sm:p-2 rounded-lg bg-muted hover:bg-primary/20 transition-colors"
                           aria-label="App Store"
                         >
-                          <Apple size={16} className="text-muted-foreground group-hover:text-primary" />
+                          <Apple size={14} className="sm:w-4 sm:h-4 text-muted-foreground group-hover:text-primary" />
                         </a>
                       )}
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-3">
                     {project.description}
                   </p>
 
                   {/* Highlights */}
-                  <div className="space-y-2 mb-4">
+                  <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4">
                     {project.highlights.slice(0, 3).map((highlight) => (
-                      <div key={highlight} className="flex items-center gap-2 text-sm">
-                        <ChevronRight size={14} className="text-primary" />
+                      <div key={highlight} className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+                        <ChevronRight size={12} className="sm:w-3.5 sm:h-3.5 text-primary shrink-0" />
                         <span className="text-muted-foreground">{highlight}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* Technologies */}
-                  <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-3 sm:pt-4 border-t border-border">
                     {project.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="px-2 py-1 text-xs font-medium bg-muted rounded-md text-muted-foreground"
+                        className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium bg-muted rounded-md text-muted-foreground"
                       >
                         {tech}
                       </span>
@@ -204,16 +204,16 @@ export default function Projects() {
         {!showAll && projects.length > 3 && (
           <motion.div
             variants={itemVariants}
-            className="text-center mt-12"
+            className="text-center mt-8 sm:mt-12"
           >
             <motion.button
               onClick={() => setShowAll(true)}
-              className="px-8 py-4 rounded-full border border-border hover:border-primary/50 transition-colors font-medium text-muted-foreground hover:text-foreground inline-flex items-center gap-2"
+              className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-border hover:border-primary/50 transition-colors font-medium text-muted-foreground hover:text-foreground inline-flex items-center gap-2 text-sm sm:text-base"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               View All Projects
-              <ChevronRight size={18} />
+              <ChevronRight size={16} className="sm:w-4.5 sm:h-4.5" />
             </motion.button>
           </motion.div>
         )}
