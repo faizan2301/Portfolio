@@ -41,7 +41,7 @@ export default function Footer() {
           <div className="space-y-3 sm:space-y-4">
             <a href="#home" onClick={(e) => handleNavClick(e, "#home")} className="inline-block">
               <span className="text-xl sm:text-2xl font-bold">
-                <span className="gradient-text">MF</span>
+                <span className="gradient-text">EMF</span>
                 <span className="text-foreground">.</span>
               </span>
             </a>

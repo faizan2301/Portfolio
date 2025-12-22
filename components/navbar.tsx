@@ -77,7 +77,7 @@ export default function Navbar() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <span className="gradient-text">MF</span>
+            <span className="gradient-text">EMF</span>
             <span className="text-foreground">.</span>
           </motion.a>
 
