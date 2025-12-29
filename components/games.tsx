@@ -35,15 +35,6 @@ const games: Game[] = [
     allow: "autoplay; payment; fullscreen; microphone; clipboard-read; focus-without-user-activation *; screen-wake-lock; gamepad; clipboard-write 'self' https://mrmine.com",
   },
   {
-    id: "poker-quest",
-    name: "Poker Quest",
-    src: "https://playsaurus.com/kongPokerQuest63/",
-    link: "https://pokerquest.com/",
-    description: "Card Strategy Game",
-    gradient: "from-green-500 to-emerald-500",
-    allow: "autoplay; payment; fullscreen; microphone; clipboard-read; focus-without-user-activation *; screen-wake-lock; gamepad; clipboard-write 'self' https://playsaurus.com/kongPokerQuest56/",
-  },
-  {
     id: "grindcraft",
     name: "Grindcraft",
     src: "https://grindcraft.com/game.php",
