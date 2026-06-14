@@ -52,40 +52,37 @@ function Key({ label, sublabel, color = "default", size = "md", delay = 0 }: Key
       hoverGlow: "rgba(139, 92, 246, 0.2)",
     },
     primary: {
-      background: "linear-gradient(145deg, #0891b2 0%, #0e7490 50%, #164e63 100%)",
+      background: "linear-gradient(145deg, #00ff88 0%, #00cc6a 50%, #009955 100%)",
       boxShadow: `
-        0 8px 0 #083344,
+        0 8px 0 #004d2e,
         0 10px 10px rgba(0, 0, 0, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(6, 182, 212, 0.3)
+        0 0 20px rgba(0, 255, 136, 0.4)
       `,
-      pressedShadow: `0 2px 0 #083344, 0 3px 5px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
-      hoverGlow: "rgba(6, 182, 212, 0.4)",
+      pressedShadow: `0 2px 0 #004d2e, 0 3px 5px rgba(0, 0, 0, 0.3)`,
+      hoverGlow: "rgba(0, 255, 136, 0.4)",
     },
     accent: {
-      background: "linear-gradient(145deg, #a855f7 0%, #8b5cf6 50%, #6d28d9 100%)",
+      background: "linear-gradient(145deg, #ff00ff 0%, #cc00cc 50%, #990099 100%)",
       boxShadow: `
-        0 8px 0 #4c1d95,
+        0 8px 0 #660066,
         0 10px 10px rgba(0, 0, 0, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(139, 92, 246, 0.3)
+        0 0 20px rgba(255, 0, 255, 0.4)
       `,
-      pressedShadow: `0 2px 0 #4c1d95, 0 3px 5px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
-      hoverGlow: "rgba(139, 92, 246, 0.4)",
+      pressedShadow: `0 2px 0 #660066, 0 3px 5px rgba(0, 0, 0, 0.3)`,
+      hoverGlow: "rgba(255, 0, 255, 0.4)",
     },
     gradient: {
-      background: "linear-gradient(145deg, #f97316 0%, #ea580c 50%, #c2410c 100%)",
+      background: "linear-gradient(145deg, #00d4ff 0%, #0099cc 50%, #006699 100%)",
       boxShadow: `
-        0 8px 0 #7c2d12,
+        0 8px 0 #003344,
         0 10px 10px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
-        0 0 40px rgba(249, 115, 22, 0.4)
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 20px rgba(0, 212, 255, 0.4)
       `,
-      pressedShadow: `0 2px 0 #7c2d12, 0 3px 5px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
-      hoverGlow: "rgba(249, 115, 22, 0.5)",
+      pressedShadow: `0 2px 0 #003344, 0 3px 5px rgba(0, 0, 0, 0.3)`,
+      hoverGlow: "rgba(0, 212, 255, 0.5)",
     },
   };
 
@@ -117,14 +114,15 @@ function Key({ label, sublabel, color = "default", size = "md", delay = 0 }: Key
       onMouseUp={() => setIsPressed(false)}
       onMouseLeave={() => setIsPressed(false)}
       onClick={handlePress}
-      className={`
+        className={`
         ${sizeClasses[size]}
-        relative rounded-xl cursor-pointer
+        relative cursor-pointer
         flex flex-col items-center justify-center
         transform-gpu
         transition-all duration-100 ease-out
         overflow-hidden
-        border border-white/5
+        border border-primary/20
+        cyber-chamfer-sm
       `}
       style={{
         background: currentColor.background,
@@ -289,12 +287,11 @@ export default function InteractiveKeyboard() {
       <motion.div
         className="relative p-3 sm:p-6 rounded-2xl"
         style={{
-          background: "linear-gradient(145deg, #1a1a28 0%, #12121a 100%)",
+          background: "linear-gradient(145deg, #12121a 0%, #0a0a0f 100%)",
           boxShadow: `
-            0 25px 50px rgba(0, 0, 0, 0.5),
-            0 10px 20px rgba(0, 0, 0, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.05),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.5)
+            0 20px 40px rgba(0, 0, 0, 0.6),
+            inset 0 1px 0 rgba(0, 255, 136, 0.1),
+            0 0 30px rgba(0, 255, 136, 0.08)
           `,
         }}
         whileHover={{ rotateX: 2, rotateY: -2 }}
@@ -304,7 +301,7 @@ export default function InteractiveKeyboard() {
         <div 
           className="absolute inset-0 rounded-2xl opacity-30"
           style={{
-            background: "radial-gradient(ellipse at center bottom, rgba(6, 182, 212, 0.15) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse at center bottom, rgba(0, 255, 136, 0.12) 0%, transparent 70%)",
           }}
         />
 
@@ -328,7 +325,7 @@ export default function InteractiveKeyboard() {
         <div 
           className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-full h-20 opacity-20"
           style={{
-            background: "linear-gradient(180deg, rgba(6, 182, 212, 0.1) 0%, transparent 100%)",
+            background: "linear-gradient(180deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%)",
             filter: "blur(10px)",
           }}
         />
@@ -340,7 +337,7 @@ export default function InteractiveKeyboard() {
           key={i}
           className="absolute w-1 h-1 rounded-full"
           style={{
-            background: i % 2 === 0 ? "#06b6d4" : "#8b5cf6",
+            background: i % 2 === 0 ? "#00ff88" : "#ff00ff",
             left: `${10 + i * 15}%`,
             top: `${20 + (i % 3) * 30}%`,
           }}

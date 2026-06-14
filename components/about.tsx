@@ -1,9 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
 import { MapPin, Briefcase, GraduationCap, Code2, Smartphone, Server } from "lucide-react";
+import SectionHeading from "@/components/ui/section-heading";
+import CountUp from "@/components/ui/count-up";
+import CyberCard from "@/components/ui/cyber-card";
+import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 
 const stats = [
   { label: "Years Experience", value: "3+", icon: Briefcase },
@@ -31,150 +32,107 @@ const highlights = [
 ];
 
 export default function About() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
-  };
-
   return (
-    <section id="about" className="py-16 sm:py-24 md:py-32 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 grid-pattern opacity-50" />
-      
-      <motion.div
-        ref={ref}
-        variants={containerVariants}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10"
-      >
-        {/* Section Header */}
-        <motion.div variants={itemVariants} className="text-center mb-10 sm:mb-16">
-          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-primary bg-primary/10 rounded-full mb-3 sm:mb-4">
-            About Me
-          </span>
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
-            Turning Ideas Into{" "}
-            <span className="gradient-text">Reality</span>
-          </h2>
-          <p className="text-muted-foreground text-sm sm:text-lg max-w-2xl mx-auto px-2 sm:px-0">
-            Passionate developer with a love for creating beautiful, functional applications
-          </p>
-        </motion.div>
+    <section id="about" className="py-20 sm:py-28 md:py-32 relative overflow-hidden skew-y-0">
+      <RevealGroup className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10" stagger={100}>
+        <RevealItem>
+          <SectionHeading
+            badge="// About Me"
+            title={
+              <>
+                Turning Ideas Into{" "}
+                <span className="neon-text">Reality</span>
+              </>
+            }
+            subtitle="Passionate developer with a love for creating beautiful, functional applications"
+          />
+        </RevealItem>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center mb-12 sm:mb-20">
-          {/* Left: Bio */}
-          <motion.div variants={itemVariants} className="space-y-4 sm:space-y-6">
-            <div className="glass rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8">
-              <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-lg sm:text-xl">
-                  F
-                </div>
-                <div>
-                  <h3 className="font-semibold text-base sm:text-lg">Mohammad Faizan Shaikh</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1">
-                    <MapPin size={12} className="sm:w-3.5 sm:h-3.5" />
-                    India
-                  </p>
-                </div>
-              </div>
-              <p className="text-muted-foreground leading-relaxed mb-3 sm:mb-4 text-sm sm:text-base">
-                As a <span className="text-foreground font-medium">M.E. Computer Science graduate</span> and{" "}
-                <span className="text-primary font-medium">Frontend Engineer at Khedmah Delivery</span>, 
-                I specialize in crafting seamless mobile and web applications using modern technologies.
-              </p>
-              <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                With over 3 years of experience, I&apos;ve led projects from concept to deployment, 
-                working with cross-functional teams to deliver high-quality products that exceed 
-                client expectations. I&apos;m passionate about clean code, intuitive UI/UX, and 
-                staying current with emerging technologies.
-              </p>
-            </div>
-
-            {/* Education */}
-            <motion.div variants={itemVariants} className="glass rounded-xl sm:rounded-2xl p-4 sm:p-6">
-              <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                <GraduationCap className="text-primary w-5 h-5 sm:w-6 sm:h-6" />
-                <h3 className="font-semibold text-sm sm:text-base">Education</h3>
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between items-start gap-2">
-                  <div>
-                    <p className="font-medium text-sm sm:text-base">M.E. Computer Science & Engineering</p>
-                    <p className="text-xs sm:text-sm text-muted-foreground">Everest College of Engineering</p>
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-start mb-12 sm:mb-16">
+          <div className="space-y-4 sm:space-y-6 -mt-4 lg:-mt-8">
+            <RevealItem>
+              <CyberCard variant="terminal" terminalTitle="profile.dat">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 cyber-chamfer-sm bg-primary flex items-center justify-center text-background font-heading font-black text-xl" style={{ boxShadow: "var(--box-shadow-neon)" }}>
+                    F
                   </div>
-                  <span className="text-xs sm:text-sm text-primary shrink-0">2024</span>
-                </div>
-                <div className="flex justify-between items-start gap-2">
                   <div>
-                    <p className="font-medium text-sm sm:text-base">B.E. Computer Science & Engineering</p>
-                    <p className="text-xs sm:text-sm text-muted-foreground">Everest College of Engineering</p>
+                    <h3 className="font-heading text-sm sm:text-base uppercase tracking-wide">Mohammad Faizan Shaikh</h3>
+                    <p className="text-xs text-muted-foreground flex items-center gap-1 font-mono">
+                      <MapPin size={12} strokeWidth={1.5} />
+                      IN // India
+                    </p>
                   </div>
-                  <span className="text-xs sm:text-sm text-primary shrink-0">2022</span>
                 </div>
-              </div>
-            </motion.div>
-          </motion.div>
+                <p className="text-muted-foreground leading-relaxed mb-3 text-sm font-mono">
+                  {"> "}As a <span className="text-foreground">M.E. Computer Science graduate</span> and{" "}
+                  <span className="neon-text">Frontend Engineer at Khedmah Delivery</span>, I specialize in crafting seamless mobile and web applications.
+                </p>
+                <p className="text-muted-foreground leading-relaxed text-sm font-mono">
+                  {"> "}With over 3 years of experience, I&apos;ve led projects from concept to deployment, working with cross-functional teams to deliver high-quality products.
+                </p>
+              </CyberCard>
+            </RevealItem>
 
-          {/* Right: Stats & Highlights */}
-          <motion.div variants={itemVariants} className="space-y-4 sm:space-y-6">
-            {/* Stats Grid */}
+            <RevealItem>
+              <CyberCard variant="default">
+                <div className="flex items-center gap-3 mb-4">
+                  <GraduationCap className="text-primary w-5 h-5" strokeWidth={1.5} />
+                  <h3 className="font-heading text-sm uppercase tracking-wide">Education</h3>
+                </div>
+                <div className="space-y-3 font-mono text-sm">
+                  <div className="flex justify-between items-start gap-2 border-b border-border pb-3">
+                    <div>
+                      <p className="font-medium">M.E. Computer Science & Engineering</p>
+                      <p className="text-xs text-muted-foreground">Everest College of Engineering</p>
+                    </div>
+                    <span className="text-primary text-xs shrink-0">[2024]</span>
+                  </div>
+                  <div className="flex justify-between items-start gap-2">
+                    <div>
+                      <p className="font-medium">B.E. Computer Science & Engineering</p>
+                      <p className="text-xs text-muted-foreground">Everest College of Engineering</p>
+                    </div>
+                    <span className="text-primary text-xs shrink-0">[2022]</span>
+                  </div>
+                </div>
+              </CyberCard>
+            </RevealItem>
+          </div>
+
+          <div className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  variants={itemVariants}
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  className="glass rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center group cursor-default"
-                >
-                  <stat.icon className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 sm:mb-3 text-primary group-hover:scale-110 transition-transform" />
-                  <div className="text-2xl sm:text-3xl font-bold gradient-text mb-1">{stat.value}</div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
-                </motion.div>
+                <RevealItem key={stat.label}>
+                  <CyberCard variant="holographic" className={`text-center ${index % 2 === 1 ? "lg:translate-y-3" : ""}`}>
+                    <stat.icon className="w-6 h-6 mx-auto mb-2 text-primary icon-glow" strokeWidth={1.5} />
+                    <div className="text-2xl sm:text-3xl font-heading font-black neon-text mb-1">
+                      <CountUp value={stat.value} />
+                    </div>
+                    <div className="font-label text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest">{stat.label}</div>
+                  </CyberCard>
+                </RevealItem>
               ))}
             </div>
 
-            {/* Highlights */}
-            <div className="space-y-3 sm:space-y-4">
-              {highlights.map((item, index) => (
-                <motion.div
-                  key={item.title}
-                  variants={itemVariants}
-                  whileHover={{ x: 4 }}
-                  className="glass rounded-lg sm:rounded-xl p-3 sm:p-5 flex gap-3 sm:gap-4 items-start group cursor-default"
-                >
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
-                    <item.icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-0.5 sm:mb-1 text-sm sm:text-base">{item.title}</h4>
-                    <p className="text-xs sm:text-sm text-muted-foreground">{item.description}</p>
-                  </div>
-                </motion.div>
+            <div className="space-y-3">
+              {highlights.map((item) => (
+                <RevealItem key={item.title}>
+                  <CyberCard hoverEffect className="flex gap-4 items-start p-4">
+                    <div className="w-10 h-10 cyber-chamfer-sm border border-primary/40 flex items-center justify-center shrink-0" style={{ boxShadow: "var(--box-shadow-neon-sm)" }}>
+                      <item.icon className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <h4 className="font-heading text-xs sm:text-sm uppercase tracking-wide mb-1">{item.title}</h4>
+                      <p className="text-xs sm:text-sm text-muted-foreground font-mono leading-relaxed">{item.description}</p>
+                    </div>
+                  </CyberCard>
+                </RevealItem>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </RevealGroup>
     </section>
   );
 }
-

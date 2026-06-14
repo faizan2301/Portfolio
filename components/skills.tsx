@@ -1,56 +1,53 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { 
-  Smartphone, 
-  Globe, 
-  Server, 
-  Database, 
-  GitBranch, 
-  Cloud, 
-  Layout, 
-  Workflow,
+import {
+  Smartphone,
+  Globe,
+  Server,
+  Database,
+  GitBranch,
   Layers,
-  Zap
+  Zap,
 } from "lucide-react";
+import SectionHeading from "@/components/ui/section-heading";
+import CyberCard from "@/components/ui/cyber-card";
+import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 
 const skillCategories = [
   {
     title: "Mobile Development",
     icon: Smartphone,
-    color: "from-cyan-500 to-blue-500",
+    accent: "#00ff88",
     skills: ["Flutter", "Dart", "React Native", "Java", "Expo", "React Native CLI"],
   },
   {
     title: "Frontend",
     icon: Globe,
-    color: "from-violet-500 to-purple-500",
+    accent: "#00d4ff",
     skills: ["React.js", "TypeScript", "JavaScript", "Tailwind CSS", "Redux", "Redux Toolkit"],
   },
   {
     title: "Backend",
     icon: Server,
-    color: "from-green-500 to-emerald-500",
+    accent: "#ff00ff",
     skills: ["Node.js", "RESTful APIs", "Express.js", "Socket.io"],
   },
   {
     title: "Database & Cloud",
     icon: Database,
-    color: "from-orange-500 to-red-500",
+    accent: "#00ff88",
     skills: ["MongoDB", "Firebase", "Firestore", "Cloud Functions"],
   },
   {
     title: "Tools & DevOps",
     icon: GitBranch,
-    color: "from-pink-500 to-rose-500",
+    accent: "#00d4ff",
     skills: ["Git", "GitHub", "Postman", "CI/CD", "Firebase Notifications"],
   },
   {
     title: "Architecture",
     icon: Layers,
-    color: "from-amber-500 to-yellow-500",
+    accent: "#ff00ff",
     skills: ["MVVM", "MVC", "MVP", "System Architecture", "State Management"],
   },
 ];
@@ -66,132 +63,64 @@ const additionalSkills = [
 ];
 
 export default function Skills() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.4 },
-    },
-  };
-
   return (
-    <section id="skills" className="py-16 sm:py-24 md:py-32 relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent" />
-      
-      <motion.div
-        ref={ref}
-        variants={containerVariants}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10"
-      >
-        {/* Section Header */}
-        <motion.div variants={itemVariants} className="text-center mb-10 sm:mb-16">
-          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-primary bg-primary/10 rounded-full mb-3 sm:mb-4">
-            Tech Stack
-          </span>
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
-            Skills &{" "}
-            <span className="gradient-text">Technologies</span>
-          </h2>
-          <p className="text-muted-foreground text-sm sm:text-lg max-w-2xl mx-auto px-2 sm:px-0">
-            A comprehensive toolkit for building modern applications
-          </p>
-        </motion.div>
+    <section id="skills" className="py-20 sm:py-28 md:py-32 relative circuit-grid">
+      <RevealGroup className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10" stagger={100}>
+        <RevealItem>
+          <SectionHeading
+            badge="// Tech Stack"
+            title={
+              <>
+                Skills &{" "}
+                <span className="neon-text">Technologies</span>
+              </>
+            }
+            subtitle="A comprehensive toolkit for building modern applications"
+          />
+        </RevealItem>
 
-        {/* Skills Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {skillCategories.map((category, index) => (
-            <motion.div
-              key={category.title}
-              variants={itemVariants}
-              whileHover={{ y: -4, scale: 1.02 }}
-              className="glass rounded-xl sm:rounded-2xl p-4 sm:p-6 group cursor-default"
-            >
-              {/* Header */}
-              <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
-                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center`}>
-                  <category.icon size={16} className="sm:w-5 sm:h-5 text-white" />
-                </div>
-                <h3 className="font-semibold text-sm sm:text-base">{category.title}</h3>
-              </div>
-
-              {/* Skills */}
-              <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                {category.skills.map((skill, skillIndex) => (
-                  <motion.span
-                    key={skill}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ delay: 0.3 + index * 0.1 + skillIndex * 0.05 }}
-                    whileHover={{ scale: 1.05 }}
-                    className="px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm bg-muted rounded-full text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-colors cursor-default"
+            <RevealItem key={category.title}>
+              <CyberCard hoverEffect className={`p-4 sm:p-6 h-full ${index % 3 === 1 ? "lg:-translate-y-2" : ""}`}>
+                <div className="flex items-center gap-3 mb-4">
+                  <div
+                    className="w-10 h-10 cyber-chamfer-sm flex items-center justify-center border"
+                    style={{ borderColor: category.accent, boxShadow: `0 0 8px ${category.accent}40` }}
                   >
-                    {skill}
-                  </motion.span>
-                ))}
-              </div>
-            </motion.div>
+                    <category.icon size={18} className="text-primary" strokeWidth={1.5} style={{ color: category.accent }} />
+                  </div>
+                  <h3 className="font-heading text-xs sm:text-sm uppercase tracking-wide">{category.title}</h3>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5">
+                  {category.skills.map((skill) => (
+                    <span key={skill} className="skill-badge px-2 py-1 text-[10px] sm:text-xs border border-border text-muted-foreground bg-background">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </CyberCard>
+            </RevealItem>
           ))}
         </div>
 
-        {/* Additional Skills */}
-        <motion.div variants={itemVariants} className="glass rounded-xl sm:rounded-2xl p-4 sm:p-8">
-          <div className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-6">
-            <Zap className="text-primary w-5 h-5 sm:w-6 sm:h-6" />
-            <h3 className="font-semibold text-base sm:text-lg">Additional Expertise</h3>
-          </div>
-          <div className="flex flex-wrap gap-2 sm:gap-3">
-            {additionalSkills.map((skill, index) => (
-              <motion.span
-                key={skill}
-                initial={{ opacity: 0, y: 10 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.5 + index * 0.05 }}
-                whileHover={{ scale: 1.05, y: -2 }}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium border border-border rounded-full text-muted-foreground hover:text-primary hover:border-primary/50 transition-all cursor-default"
-              >
-                {skill}
-              </motion.span>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Decorative Elements */}
-        <div className="mt-10 sm:mt-16 flex justify-center gap-6 sm:gap-8 text-muted-foreground/30">
-          {[Workflow, Cloud, Layout].map((Icon, i) => (
-            <motion.div
-              key={i}
-              animate={{
-                y: [0, -10, 0],
-                rotate: [0, 5, -5, 0],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                delay: i * 0.5,
-              }}
-            >
-              <Icon size={28} className="sm:w-10 sm:h-10" />
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
+        <RevealItem>
+          <CyberCard variant="terminal" terminalTitle="skills.ext">
+            <div className="flex items-center gap-2 mb-4">
+              <Zap className="text-primary w-5 h-5" strokeWidth={1.5} />
+              <h3 className="font-heading text-sm uppercase tracking-wide">Additional Expertise</h3>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {additionalSkills.map((skill) => (
+                <span key={skill} className="skill-badge px-3 py-1.5 text-xs font-label uppercase tracking-wider border border-border text-muted-foreground">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </CyberCard>
+        </RevealItem>
+      </RevealGroup>
     </section>
   );
 }
-

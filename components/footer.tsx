@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Heart, ArrowUp, Github, Linkedin, Mail, ExternalLink } from "lucide-react";
+import { CyberButton } from "./ui/cyber-button";
 
 const navLinks = [
   { name: "Home", href: "#home" },
@@ -20,46 +20,35 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <footer className="relative py-8 sm:py-12 border-t border-border">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        {/* Main Footer Content */}
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
-          {/* Brand */}
-          <div className="space-y-3 sm:space-y-4">
-            <a href="#home" onClick={(e) => handleNavClick(e, "#home")} className="inline-block">
-              <span className="text-xl sm:text-2xl font-bold">
-                <span className="gradient-text">EMF</span>
-                <span className="text-foreground">.</span>
-              </span>
+    <footer className="relative py-10 sm:py-14 border-t border-border footer-circuit">
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
+          <div className="space-y-3">
+            <a href="#home" onClick={(e) => handleNavClick(e, "#home")} className="inline-block font-heading text-xl font-black tracking-widest neon-text">
+              EMF<span className="text-accent-secondary">.</span>
             </a>
-            <p className="text-xs sm:text-sm text-muted-foreground max-w-xs">
-              Frontend Engineer & Mobile Developer crafting seamless digital experiences with modern technologies.
+            <p className="text-xs text-muted-foreground max-w-xs font-mono leading-relaxed">
+              {"> "}Frontend Engineer & Mobile Developer crafting seamless digital experiences.
             </p>
           </div>
 
-          {/* Quick Links */}
-          <div className="space-y-3 sm:space-y-4">
-            <h4 className="font-semibold text-sm sm:text-base">Quick Links</h4>
-            <nav className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-1.5 sm:gap-y-2">
+          <div className="space-y-3">
+            <h4 className="font-label text-xs uppercase tracking-[0.2em] text-primary">Quick Links</h4>
+            <nav className="flex flex-wrap gap-x-4 gap-y-2">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="font-label text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
                 >
                   {link.name}
                 </a>
@@ -67,51 +56,37 @@ export default function Footer() {
             </nav>
           </div>
 
-          {/* Social Links */}
-          <div className="space-y-3 sm:space-y-4">
-            <h4 className="font-semibold text-sm sm:text-base">Connect</h4>
-            <div className="flex gap-2 sm:gap-3">
+          <div className="space-y-3">
+            <h4 className="font-label text-xs uppercase tracking-[0.2em] text-primary">Connect</h4>
+            <div className="flex gap-2">
               {socialLinks.map((link) => (
-                <motion.a
+                <a
                   key={link.label}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                  className="w-9 h-9 cyber-chamfer-sm border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-all icon-glow"
                   aria-label={link.label}
                 >
-                  <link.icon size={16} className="sm:w-4.5 sm:h-4.5" />
-                </motion.a>
+                  <link.icon size={15} strokeWidth={1.5} />
+                </a>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-border pt-6 sm:pt-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-            {/* Copyright */}
-            <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 text-center sm:text-left">
-              © {new Date().getFullYear()} Mohammad Faizan Shaikh. Built with{" "}
-              <Heart size={12} className="sm:w-3.5 sm:h-3.5 text-red-500 inline" fill="currentColor" /> using Next.js
-            </p>
+        <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="font-mono text-xs text-muted-foreground flex items-center gap-1 text-center sm:text-left">
+            © {new Date().getFullYear()} Mohammad Faizan Shaikh. Built with{" "}
+            <Heart size={12} className="text-destructive inline" fill="currentColor" /> Next.js
+          </p>
 
-            {/* Back to Top */}
-            <motion.button
-              onClick={scrollToTop}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              Back to top
-              <ArrowUp size={14} className="sm:w-4 sm:h-4" />
-            </motion.button>
-          </div>
+          <CyberButton variant="outline" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-xs px-4 py-2">
+            Back to top
+            <ArrowUp size={14} strokeWidth={1.5} />
+          </CyberButton>
         </div>
       </div>
     </footer>
   );
 }
-

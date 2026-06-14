@@ -1,15 +1,22 @@
 import type { Metadata } from "next";
-import { Outfit, JetBrains_Mono } from "next/font/google";
+import { Orbitron, Share_Tech_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({
-  variable: "--font-geist-sans",
+const orbitron = Orbitron({
+  variable: "--font-orbitron",
   subsets: ["latin"],
   display: "swap",
 });
 
+const shareTech = Share_Tech_Mono({
+  variable: "--font-share-tech",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
+
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-mono-body",
   subsets: ["latin"],
   display: "swap",
 });
@@ -58,9 +65,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${outfit.variable} ${jetbrainsMono.variable} antialiased noise`}
+        className={`${orbitron.variable} ${shareTech.variable} ${jetbrainsMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         {children}
       </body>

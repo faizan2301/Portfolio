@@ -1,325 +1,334 @@
 "use client";
 
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Download, Sparkles } from "lucide-react";
+import { ArrowDown, Download, Terminal } from "lucide-react";
 import InteractiveKeyboard from "./interactive-keyboard";
+import { CyberButton } from "./ui/cyber-button";
 
-// Generate deterministic particle data based on index
-function generateParticleData(index: number) {
-  // Use sine/cosine functions with index to create pseudo-random but deterministic values
-  const seed1 = Math.sin(index * 12.9898) * 43758.5453;
-  const seed2 = Math.cos(index * 78.233) * 43758.5453;
-  const seed3 = Math.sin(index * 45.164) * 43758.5453;
-  
-  const rand1 = seed1 - Math.floor(seed1);
-  const rand2 = seed2 - Math.floor(seed2);
-  const rand3 = seed3 - Math.floor(seed3);
-  
-  return {
-    hue: 180 + rand1 * 60,
-    left: rand2 * 100,
-    top: rand3 * 100,
-    xOffset: rand1 * 20 - 10,
-    duration: 3 + rand2 * 4,
-    delay: rand3 * 2,
-  };
+function ParticleCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.matchMedia("(max-width: 768px), (pointer: coarse)").matches;
+    if (prefersReducedMotion || isMobile) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationId: number;
+    const particleCount = 60;
+
+    interface Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+      opacity: number;
+    }
+
+    const particles: Particle[] = [];
+
+    const resize = () => {
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      canvas.width = parent.offsetWidth;
+      canvas.height = parent.offsetHeight;
+    };
+
+    const initParticles = () => {
+      particles.length = 0;
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          radius: Math.random() * 1.5 + 0.5,
+          opacity: Math.random() * 0.5 + 0.2,
+        });
+      }
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 255, 136, ${p.opacity})`;
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = "rgba(0, 255, 136, 0.8)";
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      animationId = requestAnimationFrame(draw);
+    };
+
+    resize();
+    initParticles();
+    draw();
+    window.addEventListener("resize", () => { resize(); initParticles(); });
+
+    return () => cancelAnimationFrame(animationId);
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none hidden md:block"
+      aria-hidden="true"
+    />
+  );
 }
 
-// Floating particles component
-function FloatingParticles() {
-  const [isMounted, setIsMounted] = useState(false);
-  
-  const particles = useMemo(() => {
-    return [...Array(50)].map((_, i) => generateParticleData(i));
+function TypewriterHeading() {
+  const fullText = "HI, I'M ";
+  const nameText = "FAIZAN";
+  const [displayedName, setDisplayedName] = useState("");
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      setDisplayedName(nameText);
+      return;
+    }
+
+    let index = 0;
+    const startDelay = setTimeout(() => {
+      const interval = setInterval(() => {
+        index++;
+        setDisplayedName(nameText.slice(0, index));
+        if (index >= nameText.length) clearInterval(interval);
+      }, 100);
+    }, 500);
+
+    return () => clearTimeout(startDelay);
+  }, []);
+
+  return (
+    <h1
+      className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-widest mb-4 sm:mb-6 font-heading leading-tight"
+      data-text={`${fullText}${displayedName}`}
+    >
+      <span className="text-foreground">{fullText}</span>
+      <span className="gradient-text-accent cyber-glitch" data-text={displayedName}>
+        {displayedName}
+      </span>
+      <span className="typewriter-cursor" />
+    </h1>
+  );
+}
+
+function TiltCard({ children }: { children: React.ReactNode }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`;
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.transform = "perspective(800px) rotateY(0deg) rotateX(0deg)";
   }, []);
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return <div className="absolute inset-0 overflow-hidden pointer-events-none" />;
-  }
+    const card = cardRef.current;
+    if (!card) return;
+    const isMobile = window.matchMedia("(max-width: 768px), (pointer: coarse)").matches;
+    if (isMobile) return;
+    card.addEventListener("mousemove", handleMouseMove);
+    card.addEventListener("mouseleave", handleMouseLeave);
+    return () => {
+      card.removeEventListener("mousemove", handleMouseMove);
+      card.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [handleMouseMove, handleMouseLeave]);
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {particles.map((particle, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 rounded-full"
-          style={{
-            background: `hsl(${particle.hue}, 70%, 60%)`,
-            left: `${particle.left}%`,
-            top: `${particle.top}%`,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            x: [0, particle.xOffset, 0],
-            opacity: [0.2, 0.8, 0.2],
-            scale: [1, 1.5, 1],
-          }}
-          transition={{
-            duration: particle.duration,
-            repeat: Infinity,
-            delay: particle.delay,
-            ease: "easeInOut",
-          }}
-        />
+    <div ref={cardRef} className="will-change-transform transition-transform duration-150 ease-out">
+      {children}
+    </div>
+  );
+}
+
+function HeroHUD() {
+  return (
+    <div className="hidden lg:block hud-panel p-4 space-y-3 text-left w-full max-w-xs">
+      <div className="flex items-center gap-2 border-b border-border pb-2">
+        <Terminal size={14} className="text-primary" strokeWidth={1.5} />
+        <span className="font-label text-xs text-primary tracking-[0.3em]">SYS.STATUS</span>
+      </div>
+      {[
+        { label: "ROLE", value: "FE ENGINEER" },
+        { label: "STACK", value: "FLUTTER / RN" },
+        { label: "STATUS", value: "ONLINE" },
+        { label: "LOC", value: "IN // REMOTE" },
+      ].map((row) => (
+        <div key={row.label} className="flex justify-between gap-4 font-mono text-xs">
+          <span className="hud-label">{row.label}</span>
+          <span className="hud-value">{row.value}</span>
+        </div>
       ))}
     </div>
   );
 }
 
-// Animated gradient orbs
-function GradientOrbs() {
-  return (
-    <>
-      <motion.div
-        className="absolute -top-20 sm:-top-40 -left-20 sm:-left-40 w-48 sm:w-96 h-48 sm:h-96 rounded-full opacity-30 blur-3xl"
-        style={{
-          background: "radial-gradient(circle, #06b6d4 0%, transparent 70%)",
-        }}
-        animate={{
-          x: [0, 50, 0],
-          y: [0, 30, 0],
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute -bottom-20 sm:-bottom-40 -right-20 sm:-right-40 w-48 sm:w-96 h-48 sm:h-96 rounded-full opacity-30 blur-3xl"
-        style={{
-          background: "radial-gradient(circle, #8b5cf6 0%, transparent 70%)",
-        }}
-        animate={{
-          x: [0, -50, 0],
-          y: [0, -30, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] rounded-full opacity-20 blur-3xl"
-        style={{
-          background: "radial-gradient(circle, #ec4899 0%, transparent 70%)",
-        }}
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.1, 0.2, 0.1],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-    </>
-  );
-}
-
-// Animated text with letter-by-letter reveal
-function AnimatedText({ text, className, delay = 0 }: { text: string; className?: string; delay?: number }) {
-  return (
-    <span className={className}>
-      {text.split("").map((char, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.3,
-            delay: delay + i * 0.03,
-            ease: "easeOut",
-          }}
-          className="inline-block"
-        >
-          {char === " " ? "\u00A0" : char}
-        </motion.span>
-      ))}
-    </span>
-  );
-}
-
 export default function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const parallaxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const { clientX, clientY } = e;
-      const { width, height, left, top } = containerRef.current.getBoundingClientRect();
-      const x = (clientX - left - width / 2) / 25;
-      const y = (clientY - top - height / 2) / 25;
-      containerRef.current.style.setProperty("--mouse-x", `${x}px`);
-      containerRef.current.style.setProperty("--mouse-y", `${y}px`);
-    };
+    const el = parallaxRef.current;
+    if (!el) return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    const handleScroll = () => {
+      el.style.transform = `translateY(${window.scrollY * 0.3}px)`;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToAbout = () => {
-    document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
-  };
+  const techStack = ["Flutter", "React Native", "TypeScript", "Node.js", "Firebase"];
 
   return (
-    <section
-      id="home"
-      ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden grid-pattern"
-    >
-      <FloatingParticles />
-      <GradientOrbs />
-
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center pt-20 sm:pt-0">
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass mb-6 sm:mb-8"
-        >
-          <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-primary" />
-          <span className="text-xs sm:text-sm font-medium text-muted-foreground">
-            Available for new opportunities
-          </span>
-        </motion.div>
-
-        {/* Main Heading */}
-        <motion.h1
-          className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 sm:mb-6"
-          style={{
-            transform: "translate(var(--mouse-x, 0), var(--mouse-y, 0))",
-          }}
-        >
-          <AnimatedText text="Hi, I'm " delay={0.3} />
-          <span className="gradient-text">
-            <AnimatedText text="Faizan" delay={0.5} />
-          </span>
-        </motion.h1>
-
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-          className="text-lg sm:text-2xl md:text-3xl text-muted-foreground mb-3 sm:mb-4"
-        >
-          Frontend Engineer & Mobile Developer
-        </motion.p>
-
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1 }}
-          className="text-sm sm:text-lg text-muted-foreground/80 max-w-2xl mx-auto mb-8 sm:mb-10 px-2 sm:px-0"
-        >
-          Crafting seamless mobile experiences with{" "}
-          <span className="text-primary">Flutter</span>,{" "}
-          <span className="text-accent">React Native</span>, and modern web technologies.
-          Building products that make a difference.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.2 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
-        >
-          <motion.a
-            href="#projects"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="group relative px-6 sm:px-8 py-3 sm:py-4 rounded-full overflow-hidden w-full sm:w-auto"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <span className="absolute inset-0 animated-gradient" />
-            <span className="relative flex items-center justify-center gap-2 font-semibold text-white text-sm sm:text-base">
-              View My Work
-              <motion.span
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                →
-              </motion.span>
-            </span>
-          </motion.a>
-
-          <motion.a
-            href="/MohammadFaizanResume.pdf"
-            download
-            className="group px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-border hover:border-primary/50 transition-colors flex items-center justify-center gap-2 font-medium text-muted-foreground hover:text-foreground w-full sm:w-auto text-sm sm:text-base"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Download size={18} />
-            Download CV
-          </motion.a>
-        </motion.div>
-
-        {/* Interactive Keyboard */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1.4 }}
-          className="mt-10 sm:mt-16 flex justify-center"
-        >
-          <InteractiveKeyboard />
-        </motion.div>
-
-        {/* Tech Stack Preview */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1.8 }}
-          className="mt-8 sm:mt-12 flex flex-wrap items-center justify-center gap-2 sm:gap-6 px-2"
-        >
-          {["Flutter", "React Native", "TypeScript", "Node.js", "Firebase"].map((tech, i) => (
-            <motion.span
-              key={tech}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.9 + i * 0.1 }}
-              className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-muted-foreground glass rounded-full"
-            >
-              {tech}
-            </motion.span>
-          ))}
-        </motion.div>
+    <section id="home" className="relative min-h-screen flex items-center overflow-hidden circuit-grid">
+      <div ref={parallaxRef} className="absolute inset-0 will-change-transform pointer-events-none" aria-hidden="true">
+        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] opacity-15 blur-3xl" style={{ background: "radial-gradient(circle, #00ff88 0%, transparent 70%)" }} />
+        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] opacity-12 blur-3xl" style={{ background: "radial-gradient(circle, #ff00ff 0%, transparent 70%)" }} />
+        <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #00d4ff 0%, transparent 70%)" }} />
       </div>
 
-      {/* Scroll Indicator */}
+      <ParticleCanvas />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pt-24 sm:pt-28 pb-16">
+        <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-10 lg:gap-16 items-center">
+          {/* Left: 60% content */}
+          <div className="text-center lg:text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="inline-flex items-center gap-2 section-badge mb-6 sm:mb-8"
+            >
+              <span className="w-2 h-2 bg-primary animate-pulse" style={{ boxShadow: "var(--box-shadow-neon-sm)" }} />
+              <span className="font-label text-xs tracking-[0.2em]">AVAILABLE FOR OPS</span>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+              <TypewriterHeading />
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="font-heading text-base sm:text-xl md:text-2xl text-muted-foreground mb-4 uppercase tracking-wide"
+            >
+              Frontend Engineer & Mobile Developer
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-8 tracking-wide leading-relaxed font-mono"
+            >
+              {"> "}Crafting seamless mobile experiences with{" "}
+              <span className="neon-text">Flutter</span>,{" "}
+              <span className="neon-text-tertiary">React Native</span>, and modern web tech.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 }}
+              className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3 sm:gap-4 mb-8"
+            >
+              <CyberButton
+                href="#projects"
+                variant="glitch"
+                className="w-full sm:w-auto px-8"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                View My Work →
+              </CyberButton>
+              <CyberButton href="/MohammadFaizanResume.pdf" variant="outline" className="w-full sm:w-auto px-8" download>
+                <Download size={16} strokeWidth={1.5} />
+                Download CV
+              </CyberButton>
+            </motion.div>
+
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3">
+              {techStack.map((tech, i) => (
+                <motion.span
+                  key={tech}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.4 + i * 0.08 }}
+                  className="tech-pill px-3 py-1.5 text-muted-foreground"
+                >
+                  {tech}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: 40% HUD + keyboard */}
+          <div className="flex flex-col items-center gap-6 -rotate-1 lg:rotate-0">
+            <HeroHUD />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1.2 }}
+              className="w-full flex justify-center"
+            >
+              <TiltCard>
+                <div className="cyber-card-holo p-3 sm:p-4">
+                  <InteractiveKeyboard />
+                </div>
+              </TiltCard>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
       <motion.button
-        onClick={scrollToAbout}
+        onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+        className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors font-label text-xs tracking-[0.2em] uppercase"
         aria-label="Scroll to about section"
       >
-        <span className="text-sm font-medium">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <ArrowDown size={20} />
+        <span>Scroll</span>
+        <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
+          <ArrowDown size={18} strokeWidth={1.5} />
         </motion.div>
       </motion.button>
     </section>
   );
 }
-

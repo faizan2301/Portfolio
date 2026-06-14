@@ -1,9 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { ExternalLink, Smartphone, Code, ChevronRight, Apple, Play } from "lucide-react";
+import { useState } from "react";
+import { ChevronRight, Apple, Play } from "lucide-react";
+import SectionHeading from "@/components/ui/section-heading";
+import { CyberButton } from "@/components/ui/cyber-button";
+import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 
 const projects = [
   {
@@ -13,7 +14,7 @@ const projects = [
     playStore: "https://play.google.com/store/apps/details?id=com.springtech.orderApp",
     appStore: "https://apps.apple.com/om/app/khedmah-delivery/id6738427748",
     highlights: ["Bug fixing & crash resolution", "Feature implementation", "Cross-platform optimization"],
-    gradient: "from-orange-500 to-red-500",
+    accent: "#00ff88",
     featured: true,
   },
   {
@@ -23,7 +24,7 @@ const projects = [
     playStore: "https://play.google.com/store/apps/details?id=com.attendance.mokshasolutions",
     appStore: "https://apps.apple.com/bn/app/m-attendance/id6443842046",
     highlights: ["Code refactoring", "Real-time tracking", "Cross-platform development"],
-    gradient: "from-blue-500 to-cyan-500",
+    accent: "#00d4ff",
     featured: true,
   },
   {
@@ -32,7 +33,7 @@ const projects = [
     technologies: ["Flutter", "Dart", "Node.js", "MVVM"],
     playStore: "https://play.google.com/store/apps/details?id=com.olive.olive",
     highlights: ["Healthcare integration", "Doctor verification", "Prescription management"],
-    gradient: "from-green-500 to-emerald-500",
+    accent: "#ff00ff",
     featured: true,
   },
   {
@@ -41,7 +42,7 @@ const projects = [
     technologies: ["Java", "XML", "Firebase", "REST APIs"],
     playStore: "https://play.google.com/store/apps/details?id=com.jjmaurangabad",
     highlights: ["Media validation system", "Multi-level approval", "Real-time monitoring"],
-    gradient: "from-purple-500 to-pink-500",
+    accent: "#00d4ff",
   },
   {
     title: "MGS Delivery",
@@ -49,176 +50,116 @@ const projects = [
     technologies: ["React Native", "JavaScript", "Node.js", "Firebase"],
     playStore: "https://play.google.com/store/apps/details?id=com.mgsdelivery",
     highlights: ["Barcode scanning", "Order management", "Real-time notifications"],
-    gradient: "from-amber-500 to-orange-500",
+    accent: "#00ff88",
   },
   {
     title: "Crypto Connars",
     description: "Cryptocurrency tracking application with user-friendly interface and dynamic real-time insights for market updates.",
     technologies: ["Flutter", "Dart", "REST APIs"],
     highlights: ["Real-time data", "Market insights", "Intuitive UI"],
-    gradient: "from-violet-500 to-purple-500",
+    accent: "#ff00ff",
   },
   {
     title: "M-CRM",
     description: "Complete CRM solution with leads management, accounts handling, invoice management, and real-time reporting portals.",
     technologies: ["Java", "XML", "Firebase", "SQLite"],
     highlights: ["Lead management", "Invoice system", "Real-time reports"],
-    gradient: "from-teal-500 to-cyan-500",
+    accent: "#00d4ff",
   },
 ];
 
 export default function Projects() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [showAll, setShowAll] = useState(false);
-
   const displayedProjects = showAll ? projects : projects.filter((p) => p.featured);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
-  };
-
   return (
-    <section id="projects" className="py-16 sm:py-24 md:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 grid-pattern opacity-30" />
-      
-      <motion.div
-        ref={ref}
-        variants={containerVariants}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10"
-      >
-        {/* Section Header */}
-        <motion.div variants={itemVariants} className="text-center mb-10 sm:mb-16">
-          <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-primary bg-primary/10 rounded-full mb-3 sm:mb-4">
-            Portfolio
-          </span>
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
-            Featured{" "}
-            <span className="gradient-text">Projects</span>
-          </h2>
-          <p className="text-muted-foreground text-sm sm:text-lg max-w-2xl mx-auto px-2 sm:px-0">
-            A showcase of mobile and web applications I&apos;ve built and contributed to
-          </p>
-        </motion.div>
+    <section id="projects" className="py-20 sm:py-28 md:py-32 relative overflow-hidden">
+      <RevealGroup className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10" stagger={100}>
+        <RevealItem>
+          <SectionHeading
+            badge="// Portfolio"
+            title={
+              <>
+                Featured{" "}
+                <span className="neon-text">Projects</span>
+              </>
+            }
+            subtitle="A showcase of mobile and web applications I've built and contributed to"
+          />
+        </RevealItem>
 
-        {/* Projects Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 -skew-y-1">
           {displayedProjects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              variants={itemVariants}
-              whileHover={{ y: -8 }}
-              className="group"
-            >
-              <div className="h-full glass rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/30">
-                {/* Gradient Header */}
-                <div className={`h-1.5 sm:h-2 bg-gradient-to-r ${project.gradient}`} />
-                
-                <div className="p-4 sm:p-6">
-                  {/* Title & Links */}
-                  <div className="flex items-start justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div>
-                      <h3 className="text-base sm:text-xl font-bold mb-1 group-hover:text-primary transition-colors">
-                        {project.title}
-                      </h3>
-                      {project.featured && (
-                        <span className="text-[10px] sm:text-xs font-medium text-accent">Featured Project</span>
-                      )}
-                    </div>
-                    <div className="flex gap-1.5 sm:gap-2 shrink-0">
-                      {project.playStore && (
-                        <a
-                          href={project.playStore}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-1.5 sm:p-2 rounded-lg bg-muted hover:bg-primary/20 transition-colors"
-                          aria-label="Play Store"
-                        >
-                          <Play size={14} className="sm:w-4 sm:h-4 text-muted-foreground group-hover:text-primary" />
-                        </a>
-                      )}
-                      {project.appStore && (
-                        <a
-                          href={project.appStore}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-1.5 sm:p-2 rounded-lg bg-muted hover:bg-primary/20 transition-colors"
-                          aria-label="App Store"
-                        >
-                          <Apple size={14} className="sm:w-4 sm:h-4 text-muted-foreground group-hover:text-primary" />
-                        </a>
-                      )}
-                    </div>
-                  </div>
+            <RevealItem key={project.title}>
+              <div className={`project-card-wrapper group h-full ${index === 1 ? "lg:translate-y-4" : ""}`}>
+                <div className="h-full cyber-card cyber-card-hover flex flex-col">
+                  <div
+                    className="project-accent-bar h-1 w-full"
+                    style={{ background: project.accent, color: project.accent, boxShadow: `0 0 8px ${project.accent}` }}
+                  />
 
-                  {/* Description */}
-                  <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-3">
-                    {project.description}
-                  </p>
-
-                  {/* Highlights */}
-                  <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4">
-                    {project.highlights.slice(0, 3).map((highlight) => (
-                      <div key={highlight} className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
-                        <ChevronRight size={12} className="sm:w-3.5 sm:h-3.5 text-primary shrink-0" />
-                        <span className="text-muted-foreground">{highlight}</span>
+                  <div className="p-4 sm:p-6 flex flex-col flex-1">
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div>
+                        <h3 className="font-heading text-sm sm:text-base uppercase tracking-wide mb-1 group-hover:neon-text transition-all">
+                          {project.title}
+                        </h3>
+                        {project.featured && (
+                          <span className="font-label text-[10px] text-accent-secondary uppercase tracking-widest">[Featured]</span>
+                        )}
                       </div>
-                    ))}
-                  </div>
+                      <div className="flex gap-1 shrink-0">
+                        {project.playStore && (
+                          <a href={project.playStore} target="_blank" rel="noopener noreferrer" className="p-1.5 border border-border hover:border-primary text-muted-foreground hover:text-primary cyber-chamfer-sm icon-glow" aria-label="Play Store">
+                            <Play size={14} strokeWidth={1.5} />
+                          </a>
+                        )}
+                        {project.appStore && (
+                          <a href={project.appStore} target="_blank" rel="noopener noreferrer" className="p-1.5 border border-border hover:border-primary text-muted-foreground hover:text-primary cyber-chamfer-sm icon-glow" aria-label="App Store">
+                            <Apple size={14} strokeWidth={1.5} />
+                          </a>
+                        )}
+                      </div>
+                    </div>
 
-                  {/* Technologies */}
-                  <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-3 sm:pt-4 border-t border-border">
-                    {project.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium bg-muted rounded-md text-muted-foreground"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-4 line-clamp-3 font-mono leading-relaxed flex-1">
+                      {project.description}
+                    </p>
+
+                    <div className="space-y-1.5 mb-4">
+                      {project.highlights.slice(0, 3).map((highlight) => (
+                        <div key={highlight} className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
+                          <ChevronRight size={12} className="text-primary shrink-0" strokeWidth={1.5} />
+                          {highlight}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 pt-3 border-t border-border">
+                      {project.technologies.map((tech) => (
+                        <span key={tech} className="px-1.5 py-0.5 text-[10px] font-label uppercase tracking-wider border border-border text-muted-foreground">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </RevealItem>
           ))}
         </div>
 
-        {/* Show More Button */}
         {!showAll && projects.length > 3 && (
-          <motion.div
-            variants={itemVariants}
-            className="text-center mt-8 sm:mt-12"
-          >
-            <motion.button
-              onClick={() => setShowAll(true)}
-              className="px-6 sm:px-8 py-3 sm:py-4 rounded-full border border-border hover:border-primary/50 transition-colors font-medium text-muted-foreground hover:text-foreground inline-flex items-center gap-2 text-sm sm:text-base"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              View All Projects
-              <ChevronRight size={16} className="sm:w-4.5 sm:h-4.5" />
-            </motion.button>
-          </motion.div>
+          <RevealItem>
+            <div className="text-center mt-10 skew-y-1">
+              <CyberButton variant="outline" onClick={() => setShowAll(true)} className="px-8">
+                View All Projects
+                <ChevronRight size={16} strokeWidth={1.5} />
+              </CyberButton>
+            </div>
+          </RevealItem>
         )}
-      </motion.div>
+      </RevealGroup>
     </section>
   );
 }
-
