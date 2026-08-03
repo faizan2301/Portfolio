@@ -59,7 +59,7 @@ export default function About() {
                     style={{ boxShadow: "var(--box-shadow-neon)" }}
                   >
                     <Image
-                      src="/profile.png"
+                      src="/og-image.png"
                       alt="Faizan Shaikh — React Native & Flutter developer"
                       fill
                       sizes="56px"
