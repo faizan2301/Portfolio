@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
     const toEmail = process.env.CONTACT_TO_EMAIL || "hello@faizanshaikh.dev";
     const fromEmail =
-      process.env.CONTACT_FROM_EMAIL || "Portfolio <onboarding@resend.dev>";
+      process.env.CONTACT_FROM_EMAIL || "Portfolio <hello@faizanshaikh.dev>";
 
     const ip = getClientIp(req.headers);
     const rate = checkRateLimit(`contact:${ip}`);
