@@ -10,7 +10,7 @@ const experiences = [
     title: "Frontend Engineer",
     company: "Khedmah Delivery",
     type: "Product-Based Company",
-    location: "Remote",
+    location: "Muscat, Oman",
     period: "2025 - Present",
     description: [
       "Working on a multi-service food delivery platform with delivery, dine-out, and pickup services",
