@@ -134,7 +134,7 @@ const jsonLd = {
   jobTitle: "React Native & Flutter Developer",
   description:
     "React Native, Flutter, iOS, Android, and full stack software developer serving clients in Oman and the Gulf.",
-  email: "mailto:skfaizan2301@gmail.com",
+  email: "mailto:hello@faizanshaikh.dev",
   areaServed: [
     { "@type": "Country", name: "Oman" },
     { "@type": "Place", name: "Gulf Cooperation Council" },
