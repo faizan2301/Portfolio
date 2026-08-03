@@ -20,9 +20,9 @@ export async function POST(req: Request) {
       return jsonError("Email service is not configured", 500);
     }
 
-    const toEmail = process.env.CONTACT_TO_EMAIL;
+    const toEmail = process.env.CONTACT_TO_EMAIL||"";
     const fromEmail =
-      process.env.CONTACT_FROM_EMAIL;
+      process.env.CONTACT_FROM_EMAIL||"";
 
     const ip = getClientIp(req.headers);
     const rate = checkRateLimit(`contact:${ip}`);
