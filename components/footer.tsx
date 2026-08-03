@@ -17,7 +17,7 @@ const sectionLinks = [
 const socialLinks = [
   { icon: Github, href: "https://github.com/faizan2301", label: "GitHub" },
   { icon: Linkedin, href: "https://linkedin.com/in/engineerfaizanshaikh", label: "LinkedIn" },
-  { icon: Mail, href: "mailto:skfaizan2301@gmail.com", label: "Email" },
+  { icon: Mail, href: "mailto:hello@faizanshaikh.dev", label: "Email" },
   { icon: ExternalLink, href: "https://engineer-faizan-shaikh.vercel.app", label: "Portfolio" },
 ];
 

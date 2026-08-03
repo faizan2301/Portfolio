@@ -1,14 +1,26 @@
 "use client";
 
-import { useState } from "react";
-import { Mail, Phone, MapPin, Send, Github, Linkedin, ExternalLink, CheckCircle, Loader2 } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  Github,
+  Linkedin,
+  ExternalLink,
+  CheckCircle,
+  Loader2,
+  AlertCircle,
+} from "lucide-react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import SectionHeading from "@/components/ui/section-heading";
 import CyberCard from "@/components/ui/cyber-card";
 import { CyberButton } from "@/components/ui/cyber-button";
 import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 
 const contactInfo = [
-  { icon: Mail, label: "Email", value: "skfaizan2301@gmail.com", href: "mailto:skfaizan2301@gmail.com" },
+  { icon: Mail, label: "Email", value: "hello@faizanshaikh.dev", href: "mailto:hello@faizanshaikh.dev" },
   { icon: Phone, label: "Phone", value: "+91 7755953765", href: "tel:+917755953765" },
   { icon: MapPin, label: "Location", value: "India" },
 ];
@@ -19,19 +31,72 @@ const socialLinks = [
   { icon: ExternalLink, label: "Portfolio", href: "https://engineer-faizan-shaikh.vercel.app", username: "engineer-faizan-shaikh" },
 ];
 
+const initialForm = { name: "", email: "", subject: "", message: "", website: "" };
+
 export default function Contact() {
-  const [formState, setFormState] = useState({ name: "", email: "", subject: "", message: "" });
+  const [formState, setFormState] = useState(initialForm);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileInstance | null>(null);
+
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const canSubmit = Boolean(siteKey) && Boolean(turnstileToken) && !isSubmitting;
+
+  const resetTurnstile = useCallback(() => {
+    setTurnstileToken(null);
+    turnstileRef.current?.reset();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    if (!siteKey) {
+      setError("Security check is not configured. Please email me directly.");
+      return;
+    }
+
+    if (!turnstileToken) {
+      setError("Please complete the security check.");
+      return;
+    }
+
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormState({ name: "", email: "", subject: "", message: "" });
-    setTimeout(() => setIsSubmitted(false), 5000);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formState.name,
+          email: formState.email,
+          subject: formState.subject,
+          message: formState.message,
+          website: formState.website,
+          turnstileToken,
+        }),
+      });
+
+      const data = (await res.json().catch(() => null)) as {
+        ok?: boolean;
+        error?: string;
+      } | null;
+
+      if (!res.ok || !data?.ok) {
+        throw new Error(data?.error || "Failed to send message. Please try again.");
+      }
+
+      setIsSubmitted(true);
+      setFormState(initialForm);
+      resetTurnstile();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to send message.");
+      resetTurnstile();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClass = "cyber-input w-full text-sm";
@@ -100,46 +165,104 @@ export default function Contact() {
 
           <RevealItem>
             <CyberCard variant="terminal" terminalTitle="message.exe" className="h-full">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="name" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Name</label>
-                    <div className="cyber-input-wrap">
-                      <input type="text" id="name" name="name" value={formState.name} onChange={(e) => setFormState((p) => ({ ...p, name: e.target.value }))} required className={inputClass} placeholder="your_name" />
+              {isSubmitted ? (
+                <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+                  <CheckCircle className="w-10 h-10 text-primary" strokeWidth={1.5} />
+                  <p className="font-mono text-sm text-foreground">Message sent successfully.</p>
+                  <p className="font-mono text-xs text-muted-foreground max-w-sm">
+                    Thanks for reaching out — I&apos;ll get back to you soon. A confirmation was also sent to your inbox.
+                  </p>
+                  <CyberButton
+                    type="button"
+                    variant="outline"
+                    className="mt-2"
+                    onClick={() => setIsSubmitted(false)}
+                  >
+                    Send another
+                  </CyberButton>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Honeypot — hidden from real users */}
+                  <div aria-hidden="true" className="absolute -left-[9999px] opacity-0 h-0 overflow-hidden">
+                    <label htmlFor="website">Website</label>
+                    <input
+                      type="text"
+                      id="website"
+                      name="website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={formState.website}
+                      onChange={(e) => setFormState((p) => ({ ...p, website: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="name" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Name</label>
+                      <div className="cyber-input-wrap">
+                        <input type="text" id="name" name="name" value={formState.name} onChange={(e) => setFormState((p) => ({ ...p, name: e.target.value }))} required minLength={2} maxLength={80} className={inputClass} placeholder="your_name" />
+                      </div>
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Email</label>
+                      <div className="cyber-input-wrap">
+                        <input type="email" id="email" name="email" value={formState.email} onChange={(e) => setFormState((p) => ({ ...p, email: e.target.value }))} required maxLength={120} className={inputClass} placeholder="your@email.com" />
+                      </div>
                     </div>
                   </div>
+
                   <div>
-                    <label htmlFor="email" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Email</label>
+                    <label htmlFor="subject" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Subject</label>
                     <div className="cyber-input-wrap">
-                      <input type="email" id="email" name="email" value={formState.email} onChange={(e) => setFormState((p) => ({ ...p, email: e.target.value }))} required className={inputClass} placeholder="your@email.com" />
+                      <input type="text" id="subject" name="subject" value={formState.subject} onChange={(e) => setFormState((p) => ({ ...p, subject: e.target.value }))} required minLength={3} maxLength={120} className={inputClass} placeholder="subject_line" />
                     </div>
                   </div>
-                </div>
 
-                <div>
-                  <label htmlFor="subject" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Subject</label>
-                  <div className="cyber-input-wrap">
-                    <input type="text" id="subject" name="subject" value={formState.subject} onChange={(e) => setFormState((p) => ({ ...p, subject: e.target.value }))} required className={inputClass} placeholder="subject_line" />
+                  <div>
+                    <label htmlFor="message" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Message</label>
+                    <div className="cyber-input-wrap cyber-textarea-wrap">
+                      <textarea id="message" name="message" value={formState.message} onChange={(e) => setFormState((p) => ({ ...p, message: e.target.value }))} required minLength={10} maxLength={5000} rows={4} className={`${inputClass} cyber-textarea resize-none`} placeholder="Enter message..." />
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <label htmlFor="message" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Message</label>
-                  <div className="cyber-input-wrap cyber-textarea-wrap">
-                    <textarea id="message" name="message" value={formState.message} onChange={(e) => setFormState((p) => ({ ...p, message: e.target.value }))} required rows={4} className={`${inputClass} cyber-textarea resize-none`} placeholder="Enter message..." />
-                  </div>
-                </div>
-
-                <CyberButton type="submit" variant="glitch" disabled={isSubmitting} className="w-full">
-                  {isSubmitting ? (
-                    <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</>
-                  ) : isSubmitted ? (
-                    <><CheckCircle className="w-4 h-4" /> Message Sent!</>
+                  {siteKey ? (
+                    <div className="flex justify-start overflow-x-auto">
+                      <Turnstile
+                        ref={turnstileRef}
+                        siteKey={siteKey}
+                        onSuccess={setTurnstileToken}
+                        onExpire={() => setTurnstileToken(null)}
+                        onError={() => {
+                          setTurnstileToken(null);
+                          setError("Security check failed to load. Please refresh and try again.");
+                        }}
+                        options={{ theme: "dark", size: "flexible" }}
+                      />
+                    </div>
                   ) : (
-                    <><Send className="w-4 h-4" strokeWidth={1.5} /> Send Message</>
+                    <p className="font-mono text-xs text-amber-400/90 flex items-start gap-2">
+                      <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                      Turnstile site key missing — add NEXT_PUBLIC_TURNSTILE_SITE_KEY to enable the form.
+                    </p>
                   )}
-                </CyberButton>
-              </form>
+
+                  {error && (
+                    <p className="font-mono text-xs text-red-400 flex items-start gap-2" role="alert">
+                      <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                      {error}
+                    </p>
+                  )}
+
+                  <CyberButton type="submit" variant="glitch" disabled={!canSubmit} className="w-full">
+                    {isSubmitting ? (
+                      <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</>
+                    ) : (
+                      <><Send className="w-4 h-4" strokeWidth={1.5} /> Send Message</>
+                    )}
+                  </CyberButton>
+                </form>
+              )}
             </CyberCard>
           </RevealItem>
         </div>
