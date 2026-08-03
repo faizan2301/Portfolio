@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Braces, Clock, Code2, Coffee, GraduationCap, Smartphone } from "lucide-react";
+import { ArrowRight, Braces, Clock, Code2, Coffee, GitBranch, GraduationCap, Layers, Network, Palette, Smartphone } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ScrollProgress from "@/components/ui/scroll-progress";
@@ -12,7 +12,7 @@ import CyberCard from "@/components/ui/cyber-card";
 export const metadata: Metadata = {
   title: "Dev Tools | Mohammad Faizan Shaikh",
   description:
-    "Free developer & student utilities — JSON converters, GPA, mobile, and date/time tools.",
+    "Free developer & student utilities — JSON, mobile, date/time, color/UI, Git/DevOps, RN/Flutter, and network tools.",
 };
 
 const tools = [
@@ -61,6 +61,38 @@ const tools = [
       "Unix timestamps, time zones, ISO formatting, relative time, age calculator, and countdowns.",
     href: "/tools/date-time",
     icon: Clock,
+    status: "online" as const,
+  },
+  {
+    name: "Color & UI",
+    description:
+      "Color picker, HEX/RGB/HSL, Material palettes, gradients, shadows, radius, and glassmorphism.",
+    href: "/tools/color-ui",
+    icon: Palette,
+    status: "online" as const,
+  },
+  {
+    name: "Git & DevOps",
+    description:
+      ".gitignore, conventional commits, changelog, README, branches, tags, Compose & YAML validators.",
+    href: "/tools/git-devops",
+    icon: GitBranch,
+    status: "online" as const,
+  },
+  {
+    name: "RN & Flutter",
+    description:
+      "Responsive fonts, dp/px, rem/px, RN styles, Flutter themes, icon sizes, and splash previews.",
+    href: "/tools/rn-flutter",
+    icon: Layers,
+    status: "online" as const,
+  },
+  {
+    name: "Network Tools",
+    description:
+      "HTTP status codes, MIME types, DNS lookup, IP geolocation, user-agent parser, and URL parser.",
+    href: "/tools/network",
+    icon: Network,
     status: "online" as const,
   },
 ];
