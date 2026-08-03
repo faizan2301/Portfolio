@@ -31,7 +31,7 @@ function shell({
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#0b1210;border:1px solid #1a3d2e;border-radius:4px;overflow:hidden;">
           <tr>
             <td style="padding:20px 24px;border-bottom:1px solid #1a3d2e;background:linear-gradient(90deg,#07140f,#0b1210);">
-              <p style="margin:0;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#00ff88;">FAIZAN SHAIKH // PORTFOLIO</p>
+              <p style="margin:0;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#00ff88;">FAIZAN SHAIKH</p>
               <h1 style="margin:8px 0 0;font-size:22px;line-height:1.3;color:#f4fff8;">${escapeHtml(title)}</h1>
             </td>
           </tr>
