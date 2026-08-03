@@ -71,7 +71,7 @@ export default function About() {
                     <h3 className="font-heading text-sm sm:text-base uppercase tracking-wide">Mohammad Faizan Shaikh</h3>
                     <p className="text-xs text-muted-foreground flex items-center gap-1 font-mono">
                       <MapPin size={12} strokeWidth={1.5} />
-                      Serving Oman & Gulf // Remote
+                      Serving Oman & Gulf // Muscat, Oman
                     </p>
                   </div>
                 </div>
@@ -81,7 +81,7 @@ export default function About() {
                   <span className="text-foreground">React Native & Flutter developer</span> building iOS, Android, and full-stack apps for clients across Oman and the Gulf.
                 </p>
                 <p className="text-muted-foreground leading-relaxed text-sm font-mono">
-                  {"> "}With over 3 years of experience as a mobile app, software, and full stack developer, I&apos;ve led projects from concept to deployment with cross-functional teams.
+                  {"> "}With over 4 years of experience as a mobile app, software, and full stack developer, I&apos;ve led projects from concept to deployment with cross-functional teams.
                 </p>
               </CyberCard>
             </RevealItem>
