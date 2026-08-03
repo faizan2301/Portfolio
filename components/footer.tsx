@@ -1,9 +1,11 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { Heart, ArrowUp, Github, Linkedin, Mail, ExternalLink } from "lucide-react";
 import { CyberButton } from "./ui/cyber-button";
 
-const navLinks = [
+const sectionLinks = [
   { name: "Home", href: "#home" },
   { name: "About", href: "#about" },
   { name: "Experience", href: "#experience" },
@@ -20,10 +22,24 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
+  const handleSectionClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (!isHome) return;
     e.preventDefault();
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const navLinks = [
+    ...sectionLinks.map((link) => ({
+      name: link.name,
+      href: isHome ? link.href : `/${link.href}`,
+      hash: link.href,
+      isRoute: false as const,
+    })),
+    { name: "Tools", href: "/tools", hash: "/tools", isRoute: true as const },
+  ];
 
   return (
     <footer className="relative py-10 sm:py-14 border-t border-border footer-circuit">
@@ -32,7 +48,11 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
           <div className="space-y-3">
-            <a href="#home" onClick={(e) => handleNavClick(e, "#home")} className="inline-block font-heading text-xl font-black tracking-widest neon-text">
+            <a
+              href={isHome ? "#home" : "/#home"}
+              onClick={(e) => handleSectionClick(e, "#home")}
+              className="inline-block font-heading text-xl font-black tracking-widest neon-text"
+            >
               EMF<span className="text-accent-secondary">.</span>
             </a>
             <p className="text-xs text-muted-foreground max-w-xs font-mono leading-relaxed">
@@ -43,16 +63,26 @@ export default function Footer() {
           <div className="space-y-3">
             <h4 className="font-label text-xs uppercase tracking-[0.2em] text-primary">Quick Links</h4>
             <nav className="flex flex-wrap gap-x-4 gap-y-2">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className="font-label text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
-                >
-                  {link.name}
-                </a>
-              ))}
+              {navLinks.map((link) =>
+                link.isRoute ? (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className="font-label text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => handleSectionClick(e, link.hash)}
+                    className="font-label text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                )
+              )}
             </nav>
           </div>
 

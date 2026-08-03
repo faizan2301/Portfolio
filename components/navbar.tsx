@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Github, Linkedin, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const navLinks = [
+const sectionLinks = [
   { name: "Home", href: "#home" },
   { name: "About", href: "#about" },
   { name: "Experience", href: "#experience" },
@@ -21,14 +23,20 @@ const socialLinks = [
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const isTools = pathname.startsWith("/tools");
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
+    if (!isHome) return;
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-      const sections = navLinks.map((link) => link.href.substring(1));
+      const sections = sectionLinks.map((link) => link.href.substring(1));
       for (const section of sections.reverse()) {
         const element = document.getElementById(section);
         if (element) {
@@ -40,15 +48,45 @@ export default function Navbar() {
         }
       }
     };
+
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isHome]);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  useEffect(() => {
+    if (!isHome) {
+      setIsScrolled(true);
+    }
+  }, [isHome]);
+
+  const resolveHref = (href: string) => (isHome ? href : `/${href}`);
+
+  const handleSectionClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (!isHome) {
+      setIsMobileMenuOpen(false);
+      return;
+    }
     e.preventDefault();
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
     setIsMobileMenuOpen(false);
   };
+
+  const isLinkActive = (href: string) => {
+    if (href === "/tools") return isTools;
+    if (!isHome) return false;
+    return activeSection === href.substring(1);
+  };
+
+  const navItems = [
+    ...sectionLinks.map((link) => ({
+      name: link.name,
+      href: resolveHref(link.href),
+      isRoute: false as const,
+      hash: link.href,
+    })),
+    { name: "Tools", href: "/tools", isRoute: true as const, hash: "/tools" },
+  ];
 
   return (
     <>
@@ -58,13 +96,13 @@ export default function Navbar() {
         transition={{ duration: 0.4 }}
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-150",
-          isScrolled ? "glass-nav py-3" : "py-4 bg-transparent"
+          isScrolled || !isHome ? "glass-nav py-3" : "py-4 bg-transparent"
         )}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           <motion.a
-            href="#home"
-            onClick={(e) => handleNavClick(e, "#home")}
+            href={isHome ? "#home" : "/#home"}
+            onClick={(e) => handleSectionClick(e, "#home")}
             className="font-heading text-xl sm:text-2xl font-black tracking-widest neon-text"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
@@ -73,21 +111,37 @@ export default function Navbar() {
           </motion.a>
 
           <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={cn(
-                  "px-3 py-2 font-label text-xs uppercase tracking-[0.15em] transition-all duration-150 cyber-chamfer-sm",
-                  activeSection === link.href.substring(1)
-                    ? "text-primary border border-primary/50 bg-primary/5"
-                    : "text-muted-foreground hover:text-primary border border-transparent hover:border-primary/30"
-                )}
-              >
-                {link.name}
-              </a>
-            ))}
+            {navItems.map((link) =>
+              link.isRoute ? (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={cn(
+                    "px-3 py-2 font-label text-xs uppercase tracking-[0.15em] transition-all duration-150 cyber-chamfer-sm",
+                    isLinkActive(link.href)
+                      ? "text-primary border border-primary/50 bg-primary/5"
+                      : "text-muted-foreground hover:text-primary border border-transparent hover:border-primary/30"
+                  )}
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => handleSectionClick(e, link.hash)}
+                  className={cn(
+                    "px-3 py-2 font-label text-xs uppercase tracking-[0.15em] transition-all duration-150 cyber-chamfer-sm",
+                    isLinkActive(link.hash)
+                      ? "text-primary border border-primary/50 bg-primary/5"
+                      : "text-muted-foreground hover:text-primary border border-transparent hover:border-primary/30"
+                  )}
+                >
+                  {link.name}
+                </a>
+              )
+            )}
           </div>
 
           <div className="flex items-center gap-3">
@@ -134,21 +188,39 @@ export default function Navbar() {
                 <span className="font-label text-xs text-muted-foreground ml-2 tracking-widest">NAV.SYS</span>
               </div>
               <div className="p-4 flex flex-col gap-1">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
-                    className={cn(
-                      "px-4 py-3 font-label text-sm uppercase tracking-widest transition-all",
-                      activeSection === link.href.substring(1)
-                        ? "text-primary border-l-2 border-primary bg-primary/5"
-                        : "text-muted-foreground hover:text-primary"
-                    )}
-                  >
-                    {"> "}{link.name}
-                  </a>
-                ))}
+                {navItems.map((link) =>
+                  link.isRoute ? (
+                    <Link
+                      key={link.name}
+                      href={link.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={cn(
+                        "px-4 py-3 font-label text-sm uppercase tracking-widest transition-all",
+                        isLinkActive(link.href)
+                          ? "text-primary border-l-2 border-primary bg-primary/5"
+                          : "text-muted-foreground hover:text-primary"
+                      )}
+                    >
+                      {"> "}
+                      {link.name}
+                    </Link>
+                  ) : (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      onClick={(e) => handleSectionClick(e, link.hash)}
+                      className={cn(
+                        "px-4 py-3 font-label text-sm uppercase tracking-widest transition-all",
+                        isLinkActive(link.hash)
+                          ? "text-primary border-l-2 border-primary bg-primary/5"
+                          : "text-muted-foreground hover:text-primary"
+                      )}
+                    >
+                      {"> "}
+                      {link.name}
+                    </a>
+                  )
+                )}
               </div>
             </motion.nav>
           </motion.div>
