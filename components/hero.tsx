@@ -182,7 +182,7 @@ function HeroHUD() {
         { label: "ROLE", value: "FE ENGINEER" },
         { label: "STACK", value: "FLUTTER / RN" },
         { label: "STATUS", value: "ONLINE" },
-        { label: "LOC", value: "IN // REMOTE" },
+        { label: "LOC", value: "GULF // REMOTE" },
       ].map((row) => (
         <div key={row.label} className="flex justify-between gap-4 font-mono text-xs">
           <span className="hud-label">{row.label}</span>
@@ -256,7 +256,7 @@ export default function Hero() {
             >
               {"> "}Crafting seamless mobile experiences with{" "}
               <span className="neon-text">Flutter</span>,{" "}
-              <span className="neon-text-tertiary">React Native</span>, and modern web tech.
+              <span className="neon-text-tertiary">React Native</span>, and modern web tech for Oman & the Gulf.
             </motion.p>
 
             <motion.div

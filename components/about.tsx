@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { MapPin, Briefcase, GraduationCap, Code2, Smartphone, Server } from "lucide-react";
 import SectionHeading from "@/components/ui/section-heading";
 import CountUp from "@/components/ui/count-up";
@@ -17,7 +18,7 @@ const highlights = [
   {
     icon: Smartphone,
     title: "Mobile Development",
-    description: "Expert in Flutter, React Native, and native Android development with Java/Kotlin.",
+    description: "React Native, Flutter, iOS, and Android developer delivering production apps across Oman and the Gulf.",
   },
   {
     icon: Code2,
@@ -26,8 +27,8 @@ const highlights = [
   },
   {
     icon: Server,
-    title: "Backend Integration",
-    description: "Proficient in Node.js, RESTful APIs, Firebase, and MongoDB for full-stack solutions.",
+    title: "Full Stack Development",
+    description: "Software & full stack developer skilled in Node.js, RESTful APIs, Firebase, and MongoDB.",
   },
 ];
 
@@ -53,23 +54,34 @@ export default function About() {
             <RevealItem>
               <CyberCard variant="terminal" terminalTitle="profile.dat">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 cyber-chamfer-sm bg-primary flex items-center justify-center text-background font-heading font-black text-xl" style={{ boxShadow: "var(--box-shadow-neon)" }}>
-                    F
+                  <div
+                    className="relative w-14 h-14 shrink-0 overflow-hidden cyber-chamfer-sm border border-primary/50"
+                    style={{ boxShadow: "var(--box-shadow-neon)" }}
+                  >
+                    <Image
+                      src="/profile.png"
+                      alt="Faizan Shaikh — React Native & Flutter developer"
+                      fill
+                      sizes="56px"
+                      className="object-cover object-top"
+                      priority
+                    />
                   </div>
                   <div>
                     <h3 className="font-heading text-sm sm:text-base uppercase tracking-wide">Mohammad Faizan Shaikh</h3>
                     <p className="text-xs text-muted-foreground flex items-center gap-1 font-mono">
                       <MapPin size={12} strokeWidth={1.5} />
-                      IN // India
+                      Serving Oman & Gulf // Remote
                     </p>
                   </div>
                 </div>
                 <p className="text-muted-foreground leading-relaxed mb-3 text-sm font-mono">
                   {"> "}As a <span className="text-foreground">M.E. Computer Science graduate</span> and{" "}
-                  <span className="neon-text">Frontend Engineer at Khedmah Delivery</span>, I specialize in crafting seamless mobile and web applications.
+                  <span className="neon-text">Frontend Engineer at Khedmah Delivery</span>, I&apos;m a{" "}
+                  <span className="text-foreground">React Native & Flutter developer</span> building iOS, Android, and full-stack apps for clients across Oman and the Gulf.
                 </p>
                 <p className="text-muted-foreground leading-relaxed text-sm font-mono">
-                  {"> "}With over 3 years of experience, I&apos;ve led projects from concept to deployment, working with cross-functional teams to deliver high-quality products.
+                  {"> "}With over 3 years of experience as a mobile app, software, and full stack developer, I&apos;ve led projects from concept to deployment with cross-functional teams.
                 </p>
               </CyberCard>
             </RevealItem>
