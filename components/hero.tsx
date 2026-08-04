@@ -182,7 +182,7 @@ function HeroHUD() {
         { label: "ROLE", value: "FE ENGINEER" },
         { label: "STACK", value: "FLUTTER / RN" },
         { label: "STATUS", value: "ONLINE" },
-        { label: "LOC", value: "GULF // REMOTE" },
+        { label: "LOC", value: "GULF // On Site" },
       ].map((row) => (
         <div key={row.label} className="flex justify-between gap-4 font-mono text-xs">
           <span className="hud-label">{row.label}</span>
