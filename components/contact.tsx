@@ -14,26 +14,16 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { useTranslations } from "next-intl";
 import SectionHeading from "@/components/ui/section-heading";
 import CyberCard from "@/components/ui/cyber-card";
 import { CyberButton } from "@/components/ui/cyber-button";
 import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 
-const contactInfo = [
-  { icon: Mail, label: "Email", value: "hello@faizanshaikh.dev", href: "mailto:hello@faizanshaikh.dev" },
-  { icon: Phone, label: "Phone", value: "+91 7755953765", href: "tel:+917755953765" },
-  { icon: MapPin, label: "Location", value: "India" },
-];
-
-const socialLinks = [
-  { icon: Github, label: "GitHub", href: "https://github.com/faizan2301", username: "@faizan2301" },
-  { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/in/engineerfaizanshaikh", username: "engineerfaizanshaikh" },
-  { icon: ExternalLink, label: "Portfolio", href: "https://engineer-faizan-shaikh.vercel.app", username: "engineer-faizan-shaikh" },
-];
-
 const initialForm = { name: "", email: "", subject: "", message: "", website: "" };
 
 export default function Contact() {
+  const t = useTranslations("contact");
   const [formState, setFormState] = useState(initialForm);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,6 +33,18 @@ export default function Contact() {
 
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const canSubmit = Boolean(siteKey) && Boolean(turnstileToken) && !isSubmitting;
+
+  const contactInfo = [
+    { icon: Mail, label: t("email"), value: "hello@faizanshaikh.dev", href: "mailto:hello@faizanshaikh.dev" },
+    { icon: Phone, label: t("phone"), value: "+91 7755953765", href: "tel:+917755953765" },
+    { icon: MapPin, label: t("location"), value: t("locationValue") },
+  ];
+
+  const socialLinks = [
+    { icon: Github, label: t("github"), href: "https://github.com/faizan2301", username: "@faizan2301" },
+    { icon: Linkedin, label: t("linkedin"), href: "https://linkedin.com/in/engineerfaizanshaikh", username: "engineerfaizanshaikh" },
+    { icon: ExternalLink, label: t("portfolio"), href: "https://engineer-faizan-shaikh.vercel.app", username: "engineer-faizan-shaikh" },
+  ];
 
   const resetTurnstile = useCallback(() => {
     setTurnstileToken(null);
@@ -54,12 +56,12 @@ export default function Contact() {
     setError(null);
 
     if (!siteKey) {
-      setError("Security check is not configured. Please email me directly.");
+      setError(t("errorSecurityMissing"));
       return;
     }
 
     if (!turnstileToken) {
-      setError("Please complete the security check.");
+      setError(t("errorSecurityRequired"));
       return;
     }
 
@@ -85,14 +87,14 @@ export default function Contact() {
       } | null;
 
       if (!res.ok || !data?.ok) {
-        throw new Error(data?.error || "Failed to send message. Please try again.");
+        throw new Error(data?.error || t("errorSendFailed"));
       }
 
       setIsSubmitted(true);
       setFormState(initialForm);
       resetTurnstile();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to send message.");
+      setError(err instanceof Error ? err.message : t("errorGeneric"));
       resetTurnstile();
     } finally {
       setIsSubmitting(false);
@@ -103,20 +105,20 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-20 sm:py-28 md:py-32 relative overflow-hidden">
-      <div className="absolute top-0 left-1/4 w-96 h-96 opacity-10 blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, #00ff88, transparent)" }} />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 opacity-10 blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, #ff00ff, transparent)" }} />
+      <div className="absolute top-0 start-1/4 w-96 h-96 opacity-10 blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, #00ff88, transparent)" }} />
+      <div className="absolute bottom-0 end-1/4 w-96 h-96 opacity-10 blur-3xl pointer-events-none" style={{ background: "radial-gradient(circle, #ff00ff, transparent)" }} />
 
       <RevealGroup className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10" stagger={100}>
         <RevealItem>
           <SectionHeading
-            badge="// Contact"
+            badge={t("badge")}
             title={
               <>
-                Let&apos;s{" "}
-                <span className="neon-text">Connect</span>
+                {t("titleBefore")}{" "}
+                <span className="neon-text">{t("titleAccent")}</span>
               </>
             }
-            subtitle="Have a project in mind or want to collaborate? Feel free to reach out!"
+            subtitle={t("subtitle")}
           />
         </RevealItem>
 
@@ -155,7 +157,7 @@ export default function Contact() {
                     >
                       <link.icon size={16} className="text-muted-foreground group-hover:text-primary icon-glow" strokeWidth={1.5} />
                       <span className="text-muted-foreground group-hover:text-primary">{link.label}</span>
-                      <span className="text-xs text-muted-foreground ml-auto truncate">{link.username}</span>
+                      <span className="text-xs text-muted-foreground ms-auto truncate">{link.username}</span>
                     </a>
                   ))}
                 </div>
@@ -168,9 +170,9 @@ export default function Contact() {
               {isSubmitted ? (
                 <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
                   <CheckCircle className="w-10 h-10 text-primary" strokeWidth={1.5} />
-                  <p className="font-mono text-sm text-foreground">Message sent successfully.</p>
+                  <p className="font-mono text-sm text-foreground">{t("successTitle")}</p>
                   <p className="font-mono text-xs text-muted-foreground max-w-sm">
-                    Thanks for reaching out — I&apos;ll get back to you soon. A confirmation was also sent to your inbox.
+                    {t("successBody")}
                   </p>
                   <CyberButton
                     type="button"
@@ -178,13 +180,12 @@ export default function Contact() {
                     className="mt-2"
                     onClick={() => setIsSubmitted(false)}
                   >
-                    Send another
+                    {t("sendAnother")}
                   </CyberButton>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Honeypot — hidden from real users */}
-                  <div aria-hidden="true" className="absolute -left-[9999px] opacity-0 h-0 overflow-hidden">
+                  <div aria-hidden="true" className="absolute -start-[9999px] opacity-0 h-0 overflow-hidden">
                     <label htmlFor="website">Website</label>
                     <input
                       type="text"
@@ -199,30 +200,30 @@ export default function Contact() {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="name" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Name</label>
+                      <label htmlFor="name" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">{t("name")}</label>
                       <div className="cyber-input-wrap">
-                        <input type="text" id="name" name="name" value={formState.name} onChange={(e) => setFormState((p) => ({ ...p, name: e.target.value }))} required minLength={2} maxLength={80} className={inputClass} placeholder="your_name" />
+                        <input type="text" id="name" name="name" value={formState.name} onChange={(e) => setFormState((p) => ({ ...p, name: e.target.value }))} required minLength={2} maxLength={80} className={inputClass} placeholder={t("namePlaceholder")} />
                       </div>
                     </div>
                     <div>
-                      <label htmlFor="email" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Email</label>
+                      <label htmlFor="email" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">{t("email")}</label>
                       <div className="cyber-input-wrap">
-                        <input type="email" id="email" name="email" value={formState.email} onChange={(e) => setFormState((p) => ({ ...p, email: e.target.value }))} required maxLength={120} className={inputClass} placeholder="your@email.com" />
+                        <input type="email" id="email" name="email" value={formState.email} onChange={(e) => setFormState((p) => ({ ...p, email: e.target.value }))} required maxLength={120} className={inputClass} placeholder={t("emailPlaceholder")} />
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="subject" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Subject</label>
+                    <label htmlFor="subject" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">{t("subject")}</label>
                     <div className="cyber-input-wrap">
-                      <input type="text" id="subject" name="subject" value={formState.subject} onChange={(e) => setFormState((p) => ({ ...p, subject: e.target.value }))} required minLength={3} maxLength={120} className={inputClass} placeholder="subject_line" />
+                      <input type="text" id="subject" name="subject" value={formState.subject} onChange={(e) => setFormState((p) => ({ ...p, subject: e.target.value }))} required minLength={3} maxLength={120} className={inputClass} placeholder={t("subjectPlaceholder")} />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">Message</label>
+                    <label htmlFor="message" className="font-label text-[10px] uppercase tracking-widest text-muted-foreground mb-2 block">{t("message")}</label>
                     <div className="cyber-input-wrap cyber-textarea-wrap">
-                      <textarea id="message" name="message" value={formState.message} onChange={(e) => setFormState((p) => ({ ...p, message: e.target.value }))} required minLength={10} maxLength={5000} rows={4} className={`${inputClass} cyber-textarea resize-none`} placeholder="Enter message..." />
+                      <textarea id="message" name="message" value={formState.message} onChange={(e) => setFormState((p) => ({ ...p, message: e.target.value }))} required minLength={10} maxLength={5000} rows={4} className={`${inputClass} cyber-textarea resize-none`} placeholder={t("messagePlaceholder")} />
                     </div>
                   </div>
 
@@ -235,7 +236,7 @@ export default function Contact() {
                         onExpire={() => setTurnstileToken(null)}
                         onError={() => {
                           setTurnstileToken(null);
-                          setError("Security check failed to load. Please refresh and try again.");
+                          setError(t("errorTurnstileLoad"));
                         }}
                         options={{ theme: "dark", size: "flexible" }}
                       />
@@ -243,7 +244,7 @@ export default function Contact() {
                   ) : (
                     <p className="font-mono text-xs text-amber-400/90 flex items-start gap-2">
                       <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
-                      Turnstile site key missing — add NEXT_PUBLIC_TURNSTILE_SITE_KEY to enable the form.
+                      {t("turnstileMissing")}
                     </p>
                   )}
 
@@ -256,9 +257,9 @@ export default function Contact() {
 
                   <CyberButton type="submit" variant="glitch" disabled={!canSubmit} className="w-full">
                     {isSubmitting ? (
-                      <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</>
+                      <><Loader2 className="w-4 h-4 animate-spin" /> {t("sending")}</>
                     ) : (
-                      <><Send className="w-4 h-4" strokeWidth={1.5} /> Send Message</>
+                      <><Send className="w-4 h-4" strokeWidth={1.5} /> {t("send")}</>
                     )}
                   </CyberButton>
                 </form>

@@ -133,6 +133,52 @@ h1, h2, h3, h4 {
   letter-spacing: 0.05em;
 }
 
+/* ─── Arabic / RTL ─── */
+html.locale-ar body {
+  font-family: var(--font-arabic), "Noto Sans Arabic", system-ui, sans-serif;
+}
+
+html.locale-ar .font-heading,
+html.locale-ar .font-label,
+html.locale-ar h1,
+html.locale-ar h2,
+html.locale-ar h3,
+html.locale-ar h4 {
+  font-family: var(--font-arabic), "Noto Sans Arabic", system-ui, sans-serif;
+  text-transform: none;
+  letter-spacing: 0 !important;
+}
+
+/* Keep Arabic name cursive — no letter-spacing / glitch clone layers */
+html.locale-ar .hero-name-ar {
+  font-family: var(--font-arabic), "Noto Sans Arabic", system-ui, sans-serif;
+  letter-spacing: 0 !important;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+  text-shadow:
+    -2px 0 rgba(255, 0, 255, 0.55),
+    2px 0 rgba(0, 212, 255, 0.55),
+    0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+html.locale-ar .hero-name-ar-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+html.locale-ar .font-mono,
+html.locale-ar .hud-label,
+html.locale-ar .hud-value,
+html.locale-ar .tech-pill,
+html.locale-ar .skill-badge {
+  font-family: var(--font-mono-body), "JetBrains Mono", monospace;
+}
+
+html.locale-ar .font-label {
+  letter-spacing: 0.02em;
+}
+
 /* ─── Scrollbar ─── */
 ::-webkit-scrollbar {
   width: 6px;
@@ -643,7 +689,7 @@ h1, h2, h3, h4 {
   width: 3px;
   height: 0.85em;
   background: var(--primary);
-  margin-left: 4px;
+  margin-inline-start: 4px;
   vertical-align: text-bottom;
   animation: blink 1s step-end infinite;
   box-shadow: var(--box-shadow-neon-sm);
