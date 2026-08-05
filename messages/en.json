@@ -1,0 +1,272 @@
+{
+  "metadata": {
+    "title": "Faizan Shaikh | React Native & Flutter Developer in Oman & Gulf",
+    "titleTemplate": "%s | Faizan Shaikh",
+    "description": "Faizan Shaikh — React Native & Flutter developer building iOS, Android, and web apps for clients across India, Oman and the Gulf.",
+    "ogTitle": "Faizan Shaikh | React Native & Flutter Developer",
+    "ogDescription": "React Native & Flutter developer building iOS, Android, and web apps for clients across Oman and the Gulf.",
+    "ogAlt": "Faizan Shaikh — React Native & Flutter Developer",
+    "siteName": "Faizan Shaikh Portfolio",
+    "jobTitle": "React Native & Flutter Developer",
+    "jsonLdDescription": "React Native, Flutter, iOS, Android, and full stack software developer serving clients in Oman and the Gulf."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "experience": "Experience",
+    "projects": "Projects",
+    "skills": "Skills",
+    "contact": "Contact",
+    "tools": "Tools",
+    "toggleMenu": "Toggle menu",
+    "navSys": "NAV.SYS",
+    "switchToEn": "EN",
+    "switchToAr": "ع",
+    "language": "Language"
+  },
+  "hero": {
+    "available": "AVAILABLE FOR OPS",
+    "greeting": "HI, I'M ",
+    "name": "FAIZAN",
+    "role": "Frontend Engineer & Mobile Developer",
+    "taglinePrefix": "Crafting seamless mobile experiences with",
+    "taglineFlutter": "Flutter",
+    "taglineRn": "React Native",
+    "taglineSuffix": ", and modern web tech for Oman & the Gulf.",
+    "viewWork": "View My Work →",
+    "downloadCv": "Download CV",
+    "scroll": "Scroll",
+    "scrollAria": "Scroll to about section",
+    "hudStatus": "SYS.STATUS",
+    "hudRole": "ROLE",
+    "hudRoleValue": "FE ENGINEER",
+    "hudStack": "STACK",
+    "hudStackValue": "FLUTTER / RN",
+    "hudOnline": "STATUS",
+    "hudOnlineValue": "ONLINE",
+    "hudLoc": "LOC",
+    "hudLocValue": "GULF // On Site"
+  },
+  "about": {
+    "badge": "// About Me",
+    "titleBefore": "Turning Ideas Into",
+    "titleAccent": "Reality",
+    "subtitle": "Passionate developer with a love for creating beautiful, functional applications",
+    "imageAlt": "Faizan Shaikh — React Native & Flutter developer",
+    "name": "Mohammad Faizan Shaikh",
+    "location": "Serving Oman & Gulf // Muscat, Oman",
+    "bio1Before": "As a",
+    "bio1Degree": "M.E. Computer Science graduate",
+    "bio1And": "and",
+    "bio1Role": "Frontend Engineer at Khedmah Delivery",
+    "bio1Mid": ", I'm a",
+    "bio1Dev": "React Native & Flutter developer",
+    "bio1After": "building iOS, Android, and full-stack apps for clients across Oman and the Gulf.",
+    "bio2": "With over 4 years of experience as a mobile app, software, and full stack developer, I've led projects from concept to deployment with cross-functional teams.",
+    "education": "Education",
+    "meDegree": "M.E. Computer Science & Engineering",
+    "beDegree": "B.E. Computer Science & Engineering",
+    "college": "Everest College of Engineering",
+    "stats": {
+      "years": "Years Experience",
+      "projects": "Projects Completed",
+      "apps": "Apps Published",
+      "tech": "Technologies"
+    },
+    "highlights": {
+      "mobileTitle": "Mobile Development",
+      "mobileDesc": "React Native, Flutter, iOS, and Android developer delivering production apps across Oman and the Gulf.",
+      "frontendTitle": "Frontend Engineering",
+      "frontendDesc": "Building responsive, performant web applications with React.js and modern frameworks.",
+      "fullstackTitle": "Full Stack Development",
+      "fullstackDesc": "Software & full stack developer skilled in Node.js, RESTful APIs, Firebase, and MongoDB."
+    }
+  },
+  "experience": {
+    "badge": "// Career Log",
+    "titleBefore": "Work",
+    "titleAccent": "Experience",
+    "subtitle": "Building impactful solutions and growing with every project",
+    "active": "Active",
+    "items": {
+      "khedmah": {
+        "title": "Frontend Engineer",
+        "company": "Khedmah Delivery",
+        "type": "Product-Based Company",
+        "location": "Muscat, Oman",
+        "period": "2025 - Present",
+        "description": [
+          "Working on a multi-service food delivery platform with delivery, dine-out, and pickup services",
+          "Responsible for bug fixes and crash resolution to maintain app stability",
+          "Contributing to new feature development for enhanced user experience",
+          "Collaborating with backend and product teams for seamless integration"
+        ]
+      },
+      "moksha": {
+        "title": "Sr. Mobile Application Developer",
+        "company": "Moksha Solutions",
+        "type": "Service-Based Company",
+        "location": "Aurangabad, India",
+        "period": "2022 - 2025",
+        "description": [
+          "Led mobile application development using Java, Flutter, Dart, and React Native",
+          "Integrated Node.js backend solutions ensuring seamless functionality",
+          "Designed and implemented innovative features for high-quality products",
+          "Direct client communication for requirements gathering and project alignment"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "badge": "// Portfolio",
+    "titleBefore": "Featured",
+    "titleAccent": "Projects",
+    "subtitle": "A showcase of mobile and web applications I've built and contributed to",
+    "featured": "[Featured]",
+    "viewAll": "View All Projects",
+    "playStore": "Play Store",
+    "appStore": "App Store",
+    "items": {
+      "khedmah": {
+        "title": "Khedmah Delivery",
+        "description": "A production-ready food delivery application offering home delivery, pickup, and dine-out services. Developed and maintained core customer features, integrated real-time order tracking and notifications, and optimized performance to deliver a fast, reliable, and seamless ordering experience.",
+        "highlights": [
+          "Developed customer-facing features for delivery, pickup, and dine-out services",
+          "Integrated Firebase Cloud Messaging (FCM) for real-time order notifications and iOS live activity widget",
+          "Enhanced app performance, responsiveness, and overall user experience",
+          "Fixed production bugs and improved application stability",
+          "Integrated REST APIs for orders, payments, and user management",
+          "Collaborated with cross-functional teams to deliver production releases"
+        ]
+      },
+      "rider": {
+        "title": "Khedmah Rider App",
+        "description": "A production-ready rider application for Khedmah's food delivery platform, enabling real-time order management, live GPS tracking, navigation, earnings monitoring, and instant delivery updates. Focused on performance optimization, reliability, and delivering a seamless experience for delivery partners.",
+        "highlights": [
+          "Implemented live order tracking and background GPS location updates",
+          "Integrated Firebase Push Notifications (FCM) for real-time delivery alerts",
+          "Optimized app performance, reducing crashes and improving stability",
+          "Built and enhanced rider workflows for order pickup and delivery",
+          "Resolved production bugs and maintained high app reliability",
+          "Collaborated with backend teams to integrate scalable REST APIs"
+        ]
+      },
+      "attendance": {
+        "title": "M-Attendance",
+        "description": "Comprehensive attendance tracking application with real-time monitoring. Led code refactoring initiatives and implemented new features for enhanced functionality.",
+        "highlights": [
+          "Code refactoring",
+          "Real-time tracking",
+          "Cross-platform development"
+        ]
+      },
+      "olive": {
+        "title": "Olive ProHealth",
+        "description": "Healthcare platform with nearby facility locator, expert Q&A forum, prescription management, and health blogs from verified doctors.",
+        "highlights": [
+          "Healthcare integration",
+          "Doctor verification",
+          "Prescription management"
+        ]
+      },
+      "jjm": {
+        "title": "JJM Monitoring App",
+        "description": "Government project monitoring app with streamlined media upload, multi-level approval system, and intuitive dashboard for stakeholders.",
+        "highlights": [
+          "Media validation system",
+          "Multi-level approval",
+          "Real-time monitoring"
+        ]
+      },
+      "mgs": {
+        "title": "MGS Delivery",
+        "description": "Delivery management system with barcode scanner integration, order assignment, credit authorization, and Firebase notifications.",
+        "highlights": [
+          "Barcode scanning",
+          "Order management",
+          "Real-time notifications"
+        ]
+      },
+      "crypto": {
+        "title": "Crypto Connars",
+        "description": "Cryptocurrency tracking application with user-friendly interface and dynamic real-time insights for market updates.",
+        "highlights": [
+          "Real-time data",
+          "Market insights",
+          "Intuitive UI"
+        ]
+      },
+      "mcrm": {
+        "title": "M-CRM",
+        "description": "Complete CRM solution with leads management, accounts handling, invoice management, and real-time reporting portals.",
+        "highlights": [
+          "Lead management",
+          "Invoice system",
+          "Real-time reports"
+        ]
+      }
+    }
+  },
+  "skills": {
+    "badge": "// Tech Stack",
+    "titleBefore": "Skills &",
+    "titleAccent": "Technologies",
+    "subtitle": "A comprehensive toolkit for building modern applications",
+    "additional": "Additional Expertise",
+    "categories": {
+      "mobile": "Mobile Development",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "database": "Database & Cloud",
+      "tools": "Tools & DevOps",
+      "architecture": "Architecture"
+    },
+    "extra": {
+      "maps": "Google Maps Integration",
+      "push": "Push Notifications",
+      "uiux": "UI/UX Principles",
+      "agile": "Agile Environment",
+      "product": "Product Designing",
+      "responsive": "Responsiveness",
+      "collab": "Team Collaboration"
+    }
+  },
+  "contact": {
+    "badge": "// Contact",
+    "titleBefore": "Let's",
+    "titleAccent": "Connect",
+    "subtitle": "Have a project in mind or want to collaborate? Feel free to reach out!",
+    "email": "Email",
+    "phone": "Phone",
+    "location": "Location",
+    "locationValue": "India",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "portfolio": "Portfolio",
+    "name": "Name",
+    "subject": "Subject",
+    "message": "Message",
+    "namePlaceholder": "your_name",
+    "emailPlaceholder": "your@email.com",
+    "subjectPlaceholder": "subject_line",
+    "messagePlaceholder": "Enter message...",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "successTitle": "Message sent successfully.",
+    "successBody": "Thanks for reaching out — I'll get back to you soon. A confirmation was also sent to your inbox.",
+    "sendAnother": "Send another",
+    "errorSecurityMissing": "Security check is not configured. Please email me directly.",
+    "errorSecurityRequired": "Please complete the security check.",
+    "errorSendFailed": "Failed to send message. Please try again.",
+    "errorGeneric": "Failed to send message.",
+    "errorTurnstileLoad": "Security check failed to load. Please refresh and try again.",
+    "turnstileMissing": "Turnstile site key missing — add NEXT_PUBLIC_TURNSTILE_SITE_KEY to enable the form."
+  },
+  "footer": {
+    "tagline": "Frontend Engineer & Mobile Developer crafting seamless digital experiences.",
+    "quickLinks": "Quick Links",
+    "connect": "Connect",
+    "copyright": "Mohammad Faizan Shaikh. Built with",
+    "backToTop": "Back to top"
+  }
+}

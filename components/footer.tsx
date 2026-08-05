@@ -3,16 +3,18 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Heart, ArrowUp, Github, Linkedin, Mail, ExternalLink } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { CyberButton } from "./ui/cyber-button";
+import { routing } from "@/i18n/routing";
 
-const sectionLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Experience", href: "#experience" },
-  { name: "Projects", href: "#projects" },
-  { name: "Skills", href: "#skills" },
-  { name: "Contact", href: "#contact" },
-];
+const sectionKeys = [
+  { key: "home", href: "#home" },
+  { key: "about", href: "#about" },
+  { key: "experience", href: "#experience" },
+  { key: "projects", href: "#projects" },
+  { key: "skills", href: "#skills" },
+  { key: "contact", href: "#contact" },
+] as const;
 
 const socialLinks = [
   { icon: Github, href: "https://github.com/faizan2301", label: "GitHub" },
@@ -22,8 +24,14 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const t = useTranslations("footer");
+  const tNav = useTranslations("nav");
+  const locale = useLocale();
   const pathname = usePathname();
-  const isHome = pathname === "/";
+  const isHome = routing.locales.some(
+    (l) => pathname === `/${l}` || pathname === `/${l}/`
+  );
+  const homeBase = `/${locale}`;
 
   const handleSectionClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (!isHome) return;
@@ -32,13 +40,13 @@ export default function Footer() {
   };
 
   const navLinks = [
-    ...sectionLinks.map((link) => ({
-      name: link.name,
-      href: isHome ? link.href : `/${link.href}`,
+    ...sectionKeys.map((link) => ({
+      name: tNav(link.key),
+      href: isHome ? link.href : `${homeBase}${link.href}`,
       hash: link.href,
       isRoute: false as const,
     })),
-    { name: "Tools", href: "/tools", hash: "/tools", isRoute: true as const },
+    { name: tNav("tools"), href: "/tools", hash: "/tools", isRoute: true as const },
   ];
 
   return (
@@ -49,24 +57,24 @@ export default function Footer() {
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
           <div className="space-y-3">
             <a
-              href={isHome ? "#home" : "/#home"}
+              href={isHome ? "#home" : `${homeBase}#home`}
               onClick={(e) => handleSectionClick(e, "#home")}
               className="inline-block font-heading text-xl font-black tracking-widest neon-text"
             >
               EMF<span className="text-accent-secondary">.</span>
             </a>
             <p className="text-xs text-muted-foreground max-w-xs font-mono leading-relaxed">
-              {"> "}Frontend Engineer & Mobile Developer crafting seamless digital experiences.
+              {"> "}{t("tagline")}
             </p>
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-label text-xs uppercase tracking-[0.2em] text-primary">Quick Links</h4>
+            <h4 className="font-label text-xs uppercase tracking-[0.2em] text-primary">{t("quickLinks")}</h4>
             <nav className="flex flex-wrap gap-x-4 gap-y-2">
               {navLinks.map((link) =>
                 link.isRoute ? (
                   <Link
-                    key={link.name}
+                    key={link.hash}
                     href={link.href}
                     className="font-label text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
                   >
@@ -74,7 +82,7 @@ export default function Footer() {
                   </Link>
                 ) : (
                   <a
-                    key={link.name}
+                    key={link.hash}
                     href={link.href}
                     onClick={(e) => handleSectionClick(e, link.hash)}
                     className="font-label text-xs uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
@@ -87,7 +95,7 @@ export default function Footer() {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-label text-xs uppercase tracking-[0.2em] text-primary">Connect</h4>
+            <h4 className="font-label text-xs uppercase tracking-[0.2em] text-primary">{t("connect")}</h4>
             <div className="flex gap-2">
               {socialLinks.map((link) => (
                 <a
@@ -106,13 +114,13 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-mono text-xs text-muted-foreground flex items-center gap-1 text-center sm:text-left">
-            © {new Date().getFullYear()} Mohammad Faizan Shaikh. Built with{" "}
+          <p className="font-mono text-xs text-muted-foreground flex items-center gap-1 text-center sm:text-start flex-wrap justify-center sm:justify-start">
+            © {new Date().getFullYear()} {t("copyright")}{" "}
             <Heart size={12} className="text-destructive inline" fill="currentColor" /> Next.js
           </p>
 
           <CyberButton variant="outline" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-xs px-4 py-2">
-            Back to top
+            {t("backToTop")}
             <ArrowUp size={14} strokeWidth={1.5} />
           </CyberButton>
         </div>

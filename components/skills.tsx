@@ -9,79 +9,81 @@ import {
   Layers,
   Zap,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import SectionHeading from "@/components/ui/section-heading";
 import CyberCard from "@/components/ui/cyber-card";
 import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 
-const skillCategories = [
+const categoryMeta = [
   {
-    title: "Mobile Development",
+    key: "mobile" as const,
     icon: Smartphone,
     accent: "#00ff88",
     skills: ["Flutter", "Dart", "React Native", "Java", "Expo", "React Native CLI"],
   },
   {
-    title: "Frontend",
+    key: "frontend" as const,
     icon: Globe,
     accent: "#00d4ff",
     skills: ["React.js", "TypeScript", "JavaScript", "Tailwind CSS", "Redux", "Redux Toolkit"],
   },
   {
-    title: "Backend",
+    key: "backend" as const,
     icon: Server,
     accent: "#ff00ff",
     skills: ["Node.js", "RESTful APIs", "Express.js", "Socket.io"],
   },
   {
-    title: "Database & Cloud",
+    key: "database" as const,
     icon: Database,
     accent: "#00ff88",
     skills: ["MongoDB", "Firebase", "Firestore", "Cloud Functions"],
   },
   {
-    title: "Tools & DevOps",
+    key: "tools" as const,
     icon: GitBranch,
     accent: "#00d4ff",
     skills: ["Git", "GitHub", "Postman", "CI/CD", "Firebase Notifications"],
   },
   {
-    title: "Architecture",
+    key: "architecture" as const,
     icon: Layers,
     accent: "#ff00ff",
     skills: ["MVVM", "MVC", "MVP", "System Architecture", "State Management"],
   },
 ];
 
-const additionalSkills = [
-  "Google Maps Integration",
-  "Push Notifications",
-  "UI/UX Principles",
-  "Agile Environment",
-  "Product Designing",
-  "Responsiveness",
-  "Team Collaboration",
-];
+const extraKeys = ["maps", "push", "uiux", "agile", "product", "responsive", "collab"] as const;
 
 export default function Skills() {
+  const t = useTranslations("skills");
+
+  const skillCategories = categoryMeta.map((cat) => ({
+    ...cat,
+    title: t(`categories.${cat.key}`),
+  }));
+
+  const additionalSkills = extraKeys.map((key) => t(`extra.${key}`));
+
   return (
     <section id="skills" className="py-20 sm:py-28 md:py-32 relative circuit-grid">
       <RevealGroup className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10" stagger={100}>
         <RevealItem>
           <SectionHeading
-            badge="// Tech Stack"
+            badge={t("badge")}
             title={
               <>
-                Skills &{" "}
-                <span className="neon-text">Technologies</span>
+                {t("titleBefore")}{" "}
+                <span className="neon-text">{t("titleAccent")}</span>
               </>
             }
-            subtitle="A comprehensive toolkit for building modern applications"
+            subtitle={t("subtitle")}
           />
         </RevealItem>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {skillCategories.map((category, index) => (
-            <RevealItem key={category.title}>
+            <RevealItem key={category.key}>
               <CyberCard hoverEffect className={`p-4 sm:p-6 h-full ${index % 3 === 1 ? "lg:-translate-y-2" : ""}`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div
@@ -109,7 +111,7 @@ export default function Skills() {
           <CyberCard variant="terminal" terminalTitle="skills.ext">
             <div className="flex items-center gap-2 mb-4">
               <Zap className="text-primary w-5 h-5" strokeWidth={1.5} />
-              <h3 className="font-heading text-sm uppercase tracking-wide">Additional Expertise</h3>
+              <h3 className="font-heading text-sm uppercase tracking-wide">{t("additional")}</h3>
             </div>
             <div className="flex flex-wrap gap-2">
               {additionalSkills.map((skill) => (

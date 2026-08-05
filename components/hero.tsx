@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Download, Terminal } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import InteractiveKeyboard from "./interactive-keyboard";
 import { CyberButton } from "./ui/cyber-button";
+import { cn } from "@/lib/utils";
 
 function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -96,12 +98,34 @@ function ParticleCanvas() {
 }
 
 function TypewriterHeading() {
-  const fullText = "HI, I'M ";
-  const nameText = "FAIZAN";
+  const t = useTranslations("hero");
+  const locale = useLocale();
+  const isArabic = locale === "ar";
+  const fullText = t("greeting");
+  const nameText = t("name");
   const [displayedName, setDisplayedName] = useState("");
+  const [showName, setShowName] = useState(false);
 
   useEffect(() => {
+    setDisplayedName("");
+    setShowName(false);
+
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Arabic cursive shaping breaks if letters are revealed one-by-one or spaced apart
+    if (isArabic) {
+      if (prefersReducedMotion) {
+        setDisplayedName(nameText);
+        setShowName(true);
+        return;
+      }
+      const timeout = setTimeout(() => {
+        setDisplayedName(nameText);
+        setShowName(true);
+      }, 400);
+      return () => clearTimeout(timeout);
+    }
+
     if (prefersReducedMotion) {
       setDisplayedName(nameText);
       return;
@@ -117,18 +141,30 @@ function TypewriterHeading() {
     }, 500);
 
     return () => clearTimeout(startDelay);
-  }, []);
+  }, [nameText, isArabic]);
 
   return (
     <h1
-      className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-widest mb-4 sm:mb-6 font-heading leading-tight"
+      className={cn(
+        "text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 sm:mb-6 font-heading leading-tight",
+        isArabic ? "tracking-normal normal-case" : "uppercase tracking-widest"
+      )}
       data-text={`${fullText}${displayedName}`}
     >
       <span className="text-foreground">{fullText}</span>
-      <span className="gradient-text-accent cyber-glitch" data-text={displayedName}>
+      <span
+        className={cn(
+          "gradient-text-accent inline-block",
+          isArabic ? "hero-name-ar" : "cyber-glitch",
+          isArabic && showName && "hero-name-ar-visible"
+        )}
+        data-text={displayedName}
+        lang={isArabic ? "ar" : undefined}
+        dir={isArabic ? "rtl" : undefined}
+      >
         {displayedName}
       </span>
-      <span className="typewriter-cursor" />
+      {!isArabic && <span className="typewriter-cursor" />}
     </h1>
   );
 }
@@ -172,18 +208,21 @@ function TiltCard({ children }: { children: React.ReactNode }) {
 }
 
 function HeroHUD() {
+  const t = useTranslations("hero");
+  const rows = [
+    { label: t("hudRole"), value: t("hudRoleValue") },
+    { label: t("hudStack"), value: t("hudStackValue") },
+    { label: t("hudOnline"), value: t("hudOnlineValue") },
+    { label: t("hudLoc"), value: t("hudLocValue") },
+  ];
+
   return (
-    <div className="hidden lg:block hud-panel p-4 space-y-3 text-left w-full max-w-xs">
+    <div className="hidden lg:block hud-panel p-4 space-y-3 text-start w-full max-w-xs">
       <div className="flex items-center gap-2 border-b border-border pb-2">
         <Terminal size={14} className="text-primary" strokeWidth={1.5} />
-        <span className="font-label text-xs text-primary tracking-[0.3em]">SYS.STATUS</span>
+        <span className="font-label text-xs text-primary tracking-[0.3em]">{t("hudStatus")}</span>
       </div>
-      {[
-        { label: "ROLE", value: "FE ENGINEER" },
-        { label: "STACK", value: "FLUTTER / RN" },
-        { label: "STATUS", value: "ONLINE" },
-        { label: "LOC", value: "GULF // On Site" },
-      ].map((row) => (
+      {rows.map((row) => (
         <div key={row.label} className="flex justify-between gap-4 font-mono text-xs">
           <span className="hud-label">{row.label}</span>
           <span className="hud-value">{row.value}</span>
@@ -194,6 +233,7 @@ function HeroHUD() {
 }
 
 export default function Hero() {
+  const t = useTranslations("hero");
   const parallaxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -214,17 +254,16 @@ export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden circuit-grid">
       <div ref={parallaxRef} className="absolute inset-0 will-change-transform pointer-events-none" aria-hidden="true">
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] opacity-15 blur-3xl" style={{ background: "radial-gradient(circle, #00ff88 0%, transparent 70%)" }} />
-        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] opacity-12 blur-3xl" style={{ background: "radial-gradient(circle, #ff00ff 0%, transparent 70%)" }} />
-        <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #00d4ff 0%, transparent 70%)" }} />
+        <div className="absolute -top-32 -start-32 w-[500px] h-[500px] opacity-15 blur-3xl" style={{ background: "radial-gradient(circle, #00ff88 0%, transparent 70%)" }} />
+        <div className="absolute -bottom-32 -end-32 w-[500px] h-[500px] opacity-12 blur-3xl" style={{ background: "radial-gradient(circle, #ff00ff 0%, transparent 70%)" }} />
+        <div className="absolute top-1/3 end-1/4 w-[400px] h-[400px] opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #00d4ff 0%, transparent 70%)" }} />
       </div>
 
       <ParticleCanvas />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pt-24 sm:pt-28 pb-16">
         <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-10 lg:gap-16 items-center">
-          {/* Left: 60% content */}
-          <div className="text-center lg:text-left">
+          <div className="text-center lg:text-start">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -232,7 +271,7 @@ export default function Hero() {
               className="inline-flex items-center gap-2 section-badge mb-6 sm:mb-8"
             >
               <span className="w-2 h-2 bg-primary animate-pulse" style={{ boxShadow: "var(--box-shadow-neon-sm)" }} />
-              <span className="font-label text-xs tracking-[0.2em]">AVAILABLE FOR OPS</span>
+              <span className="font-label text-xs tracking-[0.2em]">{t("available")}</span>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
@@ -245,7 +284,7 @@ export default function Hero() {
               transition={{ delay: 0.6 }}
               className="font-heading text-base sm:text-xl md:text-2xl text-muted-foreground mb-4 uppercase tracking-wide"
             >
-              Frontend Engineer & Mobile Developer
+              {t("role")}
             </motion.p>
 
             <motion.p
@@ -254,9 +293,10 @@ export default function Hero() {
               transition={{ delay: 0.8 }}
               className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-8 tracking-wide leading-relaxed font-mono"
             >
-              {"> "}Crafting seamless mobile experiences with{" "}
-              <span className="neon-text">Flutter</span>,{" "}
-              <span className="neon-text-tertiary">React Native</span>, and modern web tech for Oman & the Gulf.
+              {"> "}{t("taglinePrefix")}{" "}
+              <span className="neon-text">{t("taglineFlutter")}</span>,{" "}
+              <span className="neon-text-tertiary">{t("taglineRn")}</span>
+              {t("taglineSuffix")}
             </motion.p>
 
             <motion.div
@@ -274,11 +314,11 @@ export default function Hero() {
                   document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
                 }}
               >
-                View My Work →
+                {t("viewWork")}
               </CyberButton>
               <CyberButton href="/MohammadFaizanResume.pdf" variant="outline" className="w-full sm:w-auto px-8" download>
                 <Download size={16} strokeWidth={1.5} />
-                Download CV
+                {t("downloadCv")}
               </CyberButton>
             </motion.div>
 
@@ -297,7 +337,6 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right: 40% HUD + keyboard */}
           <div className="flex flex-col items-center gap-6 -rotate-1 lg:rotate-0">
             <HeroHUD />
             <motion.div
@@ -322,9 +361,9 @@ export default function Hero() {
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
         className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors font-label text-xs tracking-[0.2em] uppercase"
-        aria-label="Scroll to about section"
+        aria-label={t("scrollAria")}
       >
-        <span>Scroll</span>
+        <span>{t("scroll")}</span>
         <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
           <ArrowDown size={18} strokeWidth={1.5} />
         </motion.div>

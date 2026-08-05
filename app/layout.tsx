@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { Orbitron, Share_Tech_Mono, JetBrains_Mono } from "next/font/google";
-import "./globals.css";
+import { Orbitron, Share_Tech_Mono, JetBrains_Mono, Noto_Sans_Arabic } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
 import { Analytics } from "@vercel/analytics/next";
+import enMessages from "@/messages/en.json";
+import "./globals.css";
 
 const orbitron = Orbitron({
   variable: "--font-orbitron",
@@ -19,6 +21,13 @@ const shareTech = Share_Tech_Mono({
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono-body",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const notoSansArabic = Noto_Sans_Arabic({
+  variable: "--font-arabic",
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
 
@@ -83,33 +92,6 @@ export const metadata: Metadata = {
   authors: [{ name: "Mohammad Faizan Shaikh", url: siteUrl }],
   creator: "Mohammad Faizan Shaikh",
   publisher: "Mohammad Faizan Shaikh",
-  alternates: {
-    canonical: siteUrl,
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: siteUrl,
-    title: "Faizan Shaikh | React Native & Flutter Developer",
-    description:
-      "React Native & Flutter developer building iOS, Android, and web apps for clients across Oman and the Gulf.",
-    siteName: "Faizan Shaikh Portfolio",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Faizan Shaikh — React Native & Flutter Developer",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Faizan Shaikh | React Native & Flutter Developer",
-    description:
-      "React Native & Flutter developer building iOS, Android, and web apps for clients across Oman and the Gulf.",
-    images: ["/og-image.png"],
-  },
   robots: {
     index: true,
     follow: true,
@@ -124,70 +106,20 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Mohammad Faizan Shaikh",
-  alternateName: "Faizan Shaikh",
-  url: siteUrl,
-  image: `${siteUrl}/og-image.png`,
-  jobTitle: "React Native & Flutter Developer",
-  description:
-    "React Native, Flutter, iOS, Android, and full stack software developer serving clients in Oman and the Gulf.",
-  email: "mailto:hello@faizanshaikh.dev",
-  areaServed: [
-    { "@type": "Country", name: "Oman" },
-    { "@type": "Place", name: "Gulf Cooperation Council" },
-  ],
-  sameAs: [
-    "https://github.com/faizan2301",
-    "https://linkedin.com/in/engineerfaizanshaikh",
-  ],
-  knowsAbout: [
-    "React Native",
-    "Flutter",
-    "iOS Development",
-    "Android Development",
-    "Mobile App Development",
-    "Full Stack Development",
-    "Software Development",
-    "TypeScript",
-    "React.js",
-    "Node.js",
-  ],
-  worksFor: {
-    "@type": "Organization",
-    name: "Khedmah Delivery",
-  },
-  alumniOf: {
-    "@type": "CollegeOrUniversity",
-    name: "Dr. Babasaheb Ambedkar Marathwada University",
-    location: {
-      "@type": "City",
-      name: "Aurangabad",
-    },
-    url: "https://bamua.digitaluniversity.ac/",
-  },
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </head>
+    <html lang="en" dir="ltr" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${orbitron.variable} ${shareTech.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${orbitron.variable} ${shareTech.variable} ${jetbrainsMono.variable} ${notoSansArabic.variable} antialiased`}
         suppressHydrationWarning
       >
-        {children}
+        <NextIntlClientProvider locale="en" messages={enMessages}>
+          {children}
+        </NextIntlClientProvider>
         <Analytics />
       </body>
     </html>

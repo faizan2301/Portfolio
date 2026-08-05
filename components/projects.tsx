@@ -2,46 +2,22 @@
 
 import { useState } from "react";
 import { ChevronRight, Apple, Play } from "lucide-react";
+import { useTranslations } from "next-intl";
 import SectionHeading from "@/components/ui/section-heading";
 import { CyberButton } from "@/components/ui/cyber-button";
 import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 
-const projects = [
+const projectMeta = [
   {
-    title: "Khedmah Delivery",
-    description:
-      "A production-ready food delivery application offering home delivery, pickup, and dine-out services. Developed and maintained core customer features, integrated real-time order tracking and notifications, and optimized performance to deliver a fast, reliable, and seamless ordering experience.",
-
-    technologies: [
-      "React Native",
-      "TypeScript",
-      "Firebase",
-      "Google Maps",
-      "REST APIs",
-    ],
-
-    playStore:
-      "https://play.google.com/store/apps/details?id=com.springtech.orderApp",
-
+    id: "khedmah" as const,
+    technologies: ["React Native", "TypeScript", "Firebase", "Google Maps", "REST APIs"],
+    playStore: "https://play.google.com/store/apps/details?id=com.springtech.orderApp",
     appStore: "https://apps.apple.com/om/app/khedmah-delivery/id6738427748",
-
-    highlights: [
-      "Developed customer-facing features for delivery, pickup, and dine-out services",
-      "Integrated Firebase Cloud Messaging (FCM) for real-time order notifications and iOS live activity widget",
-      "Enhanced app performance, responsiveness, and overall user experience",
-      "Fixed production bugs and improved application stability",
-      "Integrated REST APIs for orders, payments, and user management",
-      "Collaborated with cross-functional teams to deliver production releases",
-    ],
-
     accent: "#ff00ff",
     featured: true,
   },
   {
-    title: "Khedmah Rider App",
-    description:
-      "A production-ready rider application for Khedmah's food delivery platform, enabling real-time order management, live GPS tracking, navigation, earnings monitoring, and instant delivery updates. Focused on performance optimization, reliability, and delivering a seamless experience for delivery partners.",
-
+    id: "rider" as const,
     technologies: [
       "React Native",
       "TypeScript",
@@ -50,99 +26,62 @@ const projects = [
       "REST APIs",
       "Live Location Tracking",
     ],
-
     playStore:
       "https://play.google.com/store/apps/details?id=com.Khedmah.driverAppCom&hl=en",
-
-    highlights: [
-      "Implemented live order tracking and background GPS location updates",
-      "Integrated Firebase Push Notifications (FCM) for real-time delivery alerts",
-      "Optimized app performance, reducing crashes and improving stability",
-      "Built and enhanced rider workflows for order pickup and delivery",
-      "Resolved production bugs and maintained high app reliability",
-      "Collaborated with backend teams to integrate scalable REST APIs",
-    ],
-
     accent: "#00ff88",
     featured: true,
   },
   {
-    title: "M-Attendance",
-    description:
-      "Comprehensive attendance tracking application with real-time monitoring. Led code refactoring initiatives and implemented new features for enhanced functionality.",
+    id: "attendance" as const,
     technologies: ["Java", "XML", "React Native", "iOS"],
     playStore:
       "https://play.google.com/store/apps/details?id=com.attendance.mokshasolutions",
     appStore: "https://apps.apple.com/bn/app/m-attendance/id6443842046",
-    highlights: [
-      "Code refactoring",
-      "Real-time tracking",
-      "Cross-platform development",
-    ],
     accent: "#00d4ff",
     featured: true,
   },
   {
-    title: "Olive ProHealth",
-    description:
-      "Healthcare platform with nearby facility locator, expert Q&A forum, prescription management, and health blogs from verified doctors.",
+    id: "olive" as const,
     technologies: ["Flutter", "Dart", "Node.js", "MVVM"],
     playStore: "https://play.google.com/store/apps/details?id=com.olive.olive",
-    highlights: [
-      "Healthcare integration",
-      "Doctor verification",
-      "Prescription management",
-    ],
     accent: "#ff00ff",
     featured: true,
   },
   {
-    title: "JJM Monitoring App",
-    description:
-      "Government project monitoring app with streamlined media upload, multi-level approval system, and intuitive dashboard for stakeholders.",
+    id: "jjm" as const,
     technologies: ["Java", "XML", "Firebase", "REST APIs"],
-    playStore:
-      "https://play.google.com/store/apps/details?id=com.jjmaurangabad",
-    highlights: [
-      "Media validation system",
-      "Multi-level approval",
-      "Real-time monitoring",
-    ],
+    playStore: "https://play.google.com/store/apps/details?id=com.jjmaurangabad",
     accent: "#00d4ff",
   },
   {
-    title: "MGS Delivery",
-    description:
-      "Delivery management system with barcode scanner integration, order assignment, credit authorization, and Firebase notifications.",
+    id: "mgs" as const,
     technologies: ["React Native", "JavaScript", "Node.js", "Firebase"],
     playStore: "https://play.google.com/store/apps/details?id=com.mgsdelivery",
-    highlights: [
-      "Barcode scanning",
-      "Order management",
-      "Real-time notifications",
-    ],
     accent: "#00ff88",
   },
   {
-    title: "Crypto Connars",
-    description:
-      "Cryptocurrency tracking application with user-friendly interface and dynamic real-time insights for market updates.",
+    id: "crypto" as const,
     technologies: ["Flutter", "Dart", "REST APIs"],
-    highlights: ["Real-time data", "Market insights", "Intuitive UI"],
     accent: "#ff00ff",
   },
   {
-    title: "M-CRM",
-    description:
-      "Complete CRM solution with leads management, accounts handling, invoice management, and real-time reporting portals.",
+    id: "mcrm" as const,
     technologies: ["Java", "XML", "Firebase", "SQLite"],
-    highlights: ["Lead management", "Invoice system", "Real-time reports"],
     accent: "#00d4ff",
   },
 ];
 
 export default function Projects() {
+  const t = useTranslations("projects");
   const [showAll, setShowAll] = useState(false);
+
+  const projects = projectMeta.map((meta) => ({
+    ...meta,
+    title: t(`items.${meta.id}.title`),
+    description: t(`items.${meta.id}.description`),
+    highlights: t.raw(`items.${meta.id}.highlights`) as string[],
+  }));
+
   const displayedProjects = showAll
     ? projects
     : projects.filter((p) => p.featured);
@@ -158,19 +97,19 @@ export default function Projects() {
       >
         <RevealItem>
           <SectionHeading
-            badge="// Portfolio"
+            badge={t("badge")}
             title={
               <>
-                Featured <span className="neon-text">Projects</span>
+                {t("titleBefore")} <span className="neon-text">{t("titleAccent")}</span>
               </>
             }
-            subtitle="A showcase of mobile and web applications I've built and contributed to"
+            subtitle={t("subtitle")}
           />
         </RevealItem>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 -skew-y-1">
           {displayedProjects.map((project, index) => (
-            <RevealItem key={project.title}>
+            <RevealItem key={project.id}>
               <div
                 className={`project-card-wrapper group h-full ${index === 1 ? "lg:translate-y-4" : ""}`}
               >
@@ -192,7 +131,7 @@ export default function Projects() {
                         </h3>
                         {project.featured && (
                           <span className="font-label text-[10px] text-accent-secondary uppercase tracking-widest">
-                            [Featured]
+                            {t("featured")}
                           </span>
                         )}
                       </div>
@@ -203,18 +142,18 @@ export default function Projects() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-1.5 border border-border hover:border-primary text-muted-foreground hover:text-primary cyber-chamfer-sm icon-glow"
-                            aria-label="Play Store"
+                            aria-label={t("playStore")}
                           >
                             <Play size={14} strokeWidth={1.5} />
                           </a>
                         )}
-                        {project.appStore && (
+                        {"appStore" in project && project.appStore && (
                           <a
                             href={project.appStore}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-1.5 border border-border hover:border-primary text-muted-foreground hover:text-primary cyber-chamfer-sm icon-glow"
-                            aria-label="App Store"
+                            aria-label={t("appStore")}
                           >
                             <Apple size={14} strokeWidth={1.5} />
                           </a>
@@ -234,7 +173,7 @@ export default function Projects() {
                         >
                           <ChevronRight
                             size={12}
-                            className="text-primary shrink-0"
+                            className="text-primary shrink-0 rtl:rotate-180"
                             strokeWidth={1.5}
                           />
                           {highlight}
@@ -267,8 +206,8 @@ export default function Projects() {
                 onClick={() => setShowAll(true)}
                 className="px-8"
               >
-                View All Projects
-                <ChevronRight size={16} strokeWidth={1.5} />
+                {t("viewAll")}
+                <ChevronRight size={16} strokeWidth={1.5} className="rtl:rotate-180" />
               </CyberButton>
             </div>
           </RevealItem>
