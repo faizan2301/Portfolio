@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import LocaleHtmlAttrs from "@/components/locale-html-attrs";
 
-const siteUrl = "https://www.faizanshaikh.dev";
+const siteUrl = "https://www.faizanshaikh.dev/en";
 
 type Props = {
   children: React.ReactNode;

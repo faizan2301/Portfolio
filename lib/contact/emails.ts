@@ -136,7 +136,7 @@ export function buildVisitorAutoReplyEmail(input: {
     `Thanks for writing. I received your message about "${input.subject}" and I'll get back to you as soon as I can.`,
     "",
     "— Faizan",
-    "https://www.faizanshaikh.dev",
+    "https://www.faizanshaikh.dev/en",
   ].join("\n");
 
   return { subject, html, text };

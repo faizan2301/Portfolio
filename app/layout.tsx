@@ -31,7 +31,7 @@ const notoSansArabic = Noto_Sans_Arabic({
   display: "swap",
 });
 
-const siteUrl = "https://www.faizanshaikh.dev";
+const siteUrl = "https://www.faizanshaikh.dev/en";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
