@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Braces, Clock, Code2, Coffee, GitBranch, GraduationCap, Layers, Network, Palette, Smartphone } from "lucide-react";
+import { ArrowRight, Braces, Clock, Code2, Coffee, GitBranch, Glasses, GraduationCap, Layers, Network, Palette, Smartphone } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ScrollProgress from "@/components/ui/scroll-progress";
@@ -45,6 +45,14 @@ const tools = [
       "SGPA/CGPA ↔ percentage, multi-semester SGPA → CGPA, and grade classification.",
     href: "/tools/gpa-converter",
     icon: GraduationCap,
+    status: "online" as const,
+  },
+  {
+    name: "Meta Glasses Converter",
+    description:
+      "Convert JPG or HEIC photos to 3024×4032 with Ray-Ban Meta EXIF metadata. Copy Base64 or save directly.",
+    href: "/tools/meta-glasses-converter",
+    icon: Glasses,
     status: "online" as const,
   },
   {
