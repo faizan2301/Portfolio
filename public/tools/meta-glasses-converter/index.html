@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Meta Glasses">
+<title>Meta Glasses Converter</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/piexifjs/1.0.6/piexif.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/heic-to@1.5.2/dist/iife/heic-to.js"></script>
+<style>
+:root {
+  color-scheme: light dark;
+
+  --label: #000000;
+  --label-secondary: rgba(60, 60, 67, 0.6);
+  --label-tertiary: rgba(60, 60, 67, 0.3);
+  --bg: #F2F2F7;
+  --bg-elevated: #FFFFFF;
+  --bg-grouped: #FFFFFF;
+  --separator: rgba(60, 60, 67, 0.29);
+  --fill-secondary: rgba(120, 120, 128, 0.16);
+  --fill-tertiary: rgba(118, 118, 128, 0.12);
+  --accent: #007AFF;
+  --accent-pressed: #0062CC;
+  --green: #34C759;
+  --green-bg: rgba(52, 199, 89, 0.14);
+  --red: #FF3B30;
+  --red-bg: rgba(255, 59, 48, 0.14);
+  --blue-bg: rgba(0, 122, 255, 0.12);
+
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-blur: 40px;
+
+  --radius-sm: 10px;
+  --radius-md: 13px;
+  --radius-lg: 20px;
+  --radius-xl: 26px;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 20px;
+  --space-xl: 32px;
+
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  --large-title: 34px;
+  --title2: 22px;
+  --headline: 17px;
+  --body: 17px;
+  --subhead: 15px;
+  --footnote: 13px;
+  --caption: 12px;
+
+  --min-touch: 44px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --label: #FFFFFF;
+    --label-secondary: rgba(235, 235, 245, 0.6);
+    --label-tertiary: rgba(235, 235, 245, 0.3);
+    --bg: #000000;
+    --bg-elevated: #1C1C1E;
+    --bg-grouped: #1C1C1E;
+    --separator: rgba(84, 84, 88, 0.65);
+    --fill-secondary: rgba(120, 120, 128, 0.32);
+    --fill-tertiary: rgba(118, 118, 128, 0.24);
+    --accent: #0A84FF;
+    --accent-pressed: #409CFF;
+    --green: #30D158;
+    --green-bg: rgba(48, 209, 88, 0.16);
+    --red: #FF453A;
+    --red-bg: rgba(255, 69, 58, 0.16);
+    --blue-bg: rgba(10, 132, 255, 0.16);
+
+    --glass-bg: rgba(44, 44, 46, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--bg);
+  color: var(--label);
+  font-family: var(--font);
+  font-size: var(--body);
+  line-height: 1.35;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + var(--space-md))
+    var(--space-md)
+    calc(env(safe-area-inset-bottom, 0px) + var(--space-xl));
+}
+
+/* Large Title Header */
+.page-header {
+  margin-bottom: var(--space-lg);
+}
+
+.page-header .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--footnote);
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.08px;
+  margin-bottom: var(--space-sm);
+}
+
+.page-header h1 {
+  font-size: var(--large-title);
+  font-weight: 700;
+  letter-spacing: 0.37px;
+  line-height: 1.1;
+  margin-bottom: var(--space-xs);
+}
+
+.page-header .subtitle {
+  font-size: var(--subhead);
+  color: var(--label-secondary);
+  line-height: 1.4;
+  max-width: 36ch;
+}
+
+/* Grouped Sections (iOS inset grouped style) */
+.section {
+  margin-bottom: var(--space-lg);
+}
+
+.section-label {
+  font-size: var(--footnote);
+  font-weight: 400;
+  color: var(--label-secondary);
+  text-transform: uppercase;
+  letter-spacing: -0.08px;
+  padding: 0 var(--space-md) var(--space-sm);
+}
+
+.group {
+  background: var(--bg-grouped);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* Drop Zone — content layer */
+.drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: 140px;
+  padding: var(--space-xl) var(--space-md);
+  background: var(--fill-tertiary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.drop-zone:active {
+  background: var(--fill-secondary);
+}
+
+.drop-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--fill-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.drop-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.drop-title {
+  font-size: var(--headline);
+  font-weight: 600;
+  letter-spacing: -0.41px;
+}
+
+.drop-sub {
+  font-size: var(--footnote);
+  color: var(--label-secondary);
+  text-align: center;
+}
+
+.file-input-hidden {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Preview — content layer */
+.preview-wrap {
+  display: none;
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--fill-tertiary);
+}
+
+.preview {
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  display: block;
+  user-select: auto;
+  -webkit-user-select: auto;
+}
+
+.preview-badge {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 0.5px solid var(--glass-border);
+  color: var(--label);
+  font-size: var(--caption);
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.preview-hint {
+  position: absolute;
+  bottom: var(--space-sm);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  font-size: var(--caption);
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (prefers-color-scheme: light) {
+  .preview-hint {
+    background: rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* Primary CTA — Liquid Glass with accent background */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: 50px;
+  padding: 14px var(--space-lg);
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-md);
+  color: #FFFFFF;
+  font-family: var(--font);
+  font-size: var(--headline);
+  font-weight: 600;
+  letter-spacing: -0.41px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+  width: 100%;
+}
+
+.btn-primary:active:not(:disabled) {
+  background: var(--accent-pressed);
+  transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-primary svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Secondary actions — grouped row style */
+.sub-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: var(--min-touch);
+  padding: 10px var(--space-md);
+  background: var(--bg-grouped);
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--accent);
+  font-family: var(--font);
+  font-size: var(--subhead);
+  font-weight: 600;
+  letter-spacing: -0.24px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-secondary:active:not(:disabled) {
+  background: var(--fill-tertiary);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  color: var(--label-tertiary);
+}
+
+.btn-secondary svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* Status feedback */
+.status {
+  display: none;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: var(--subhead);
+  font-weight: 400;
+  line-height: 1.4;
+  animation: fadeIn 0.25s ease;
+}
+
+.status.success {
+  background: var(--green-bg);
+  color: var(--green);
+}
+
+.status.error {
+  background: var(--red-bg);
+  color: var(--red);
+}
+
+.status.loading {
+  background: var(--blue-bg);
+  color: var(--accent);
+}
+
+.status-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.status-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Spec rows */
+.spec-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--min-touch);
+  padding: 0 var(--space-md);
+  position: relative;
+}
+
+.spec-row:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: var(--space-md);
+  right: 0;
+  bottom: 0;
+  height: 0.5px;
+  background: var(--separator);
+}
+
+.spec-row .key {
+  font-size: var(--body);
+  color: var(--label);
+}
+
+.spec-row .val {
+  font-size: var(--body);
+  color: var(--label-secondary);
+}
+
+.fit-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  padding: 3px;
+  background: var(--fill-tertiary);
+  border-radius: var(--radius-md);
+}
+
+.fit-option {
+  min-height: 36px;
+  border: none;
+  border-radius: calc(var(--radius-md) - 2px);
+  background: transparent;
+  color: var(--label-secondary);
+  font-family: var(--font);
+  font-size: var(--footnote);
+  font-weight: 600;
+  letter-spacing: -0.08px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.fit-option.active {
+  background: var(--bg-grouped);
+  color: var(--label);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.fit-hint {
+  font-size: var(--footnote);
+  color: var(--label-secondary);
+  line-height: 1.45;
+  padding: var(--space-sm) var(--space-md) 0;
+}
+
+/* Footer */
+.footer-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: var(--footnote);
+  color: var(--label-secondary);
+  text-align: center;
+  padding: var(--space-sm) var(--space-md);
+  line-height: 1.4;
+}
+
+.footer-note svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* Sticky bottom glass bar on larger screens */
+@media (min-width: 400px) {
+  .actions-sticky {
+    position: sticky;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-md));
+    z-index: 10;
+  }
+
+  .actions-sticky .btn-primary {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    border: 0.5px solid var(--glass-border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    color: var(--accent);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .actions-sticky .btn-primary {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .actions-sticky .btn-primary:not(:disabled) {
+    background:
+      linear-gradient(var(--accent), var(--accent)),
+      var(--glass-bg);
+    background-blend-mode: normal;
+    color: #fff;
+    border-color: transparent;
+  }
+
+  .actions-sticky .btn-primary:active:not(:disabled) {
+    background: var(--accent-pressed);
+    color: #fff;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="page-header">
+    <p class="eyebrow">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 8.5C2 5.46 4.46 3 7.5 3h9C19.54 3 22 5.46 22 8.5v7c0 3.04-2.46 5.5-5.5 5.5h-9C4.46 21 2 18.54 2 15.5v-7zM7.5 5C5.57 5 4 6.57 4 8.5v7C4 17.43 5.57 19 7.5 19h9c1.93 0 3.5-1.57 3.5-3.5v-7C20 6.57 18.43 5 16.5 5h-9z"/><path d="M8 10a1 1 0 011-1h6a1 1 0 110 2H9a1 1 0 01-1-1zm0 4a1 1 0 011-1h4a1 1 0 110 2H9a1 1 0 01-1-1z"/></svg>
+      Ray-Ban Meta Smart Glasses
+    </p>
+    <h1>Photo Converter</h1>
+    <p class="subtitle">Convert photos to 3024×4032 with Meta AI EXIF metadata. Copy Base64 or save directly.</p>
+  </header>
+
+  <!-- Upload & Preview -->
+  <section class="section" aria-label="Photo upload">
+    <p class="section-label">Photo</p>
+    <div class="group" style="padding: var(--space-md); display: flex; flex-direction: column; gap: var(--space-md);">
+
+      <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Tap to select a JPG or HEIC photo">
+        <div class="drop-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <p class="drop-title" id="uploadTitle">Choose a photo</p>
+        <p class="drop-sub" id="uploadSub">JPG, JPEG, or HEIC format</p>
+      </div>
+
+      <div class="preview-wrap" id="previewContainer">
+        <img id="preview" class="preview" alt="Selected photo preview">
+        <div class="preview-badge" id="previewTag">Ready</div>
+        <div class="preview-hint">Tap and hold to save</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fit mode -->
+  <section class="section" aria-label="Aspect ratio fit">
+    <p class="section-label">Aspect ratio</p>
+    <div class="group" style="padding: var(--space-md);">
+      <div class="fit-toggle" role="group" aria-label="How to fit your photo into 3024×4032">
+        <button type="button" class="fit-option active" data-fit="cover" aria-pressed="true">Crop to fill</button>
+        <button type="button" class="fit-option" data-fit="contain" aria-pressed="false">Fit entire image</button>
+      </div>
+      <p class="fit-hint" id="fitHint">Meta Glasses output is 3:4 (3024×4032). Phone photos (9:16) need cropping or letterboxing.</p>
+    </div>
+  </section>
+
+  <!-- Actions -->
+  <section class="section actions-sticky" aria-label="Conversion actions">
+    <div class="actions">
+      <button id="allInOneBtn" class="btn-primary" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span id="allInOneText">Convert photo</span>
+      </button>
+      <div class="sub-actions">
+        <button id="copyBtn" class="btn-secondary" type="button" disabled aria-label="Copy Base64 to clipboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy Base64
+        </button>
+        <button id="saveBtn" class="btn-secondary" type="button" disabled aria-label="Save or share photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Save / Share
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Status -->
+  <div id="status" class="status" role="status" aria-live="polite"></div>
+
+  <!-- Specs -->
+  <section class="section" aria-label="Output specifications">
+    <p class="section-label">Output</p>
+    <div class="group">
+      <div class="spec-row">
+        <span class="key">Resolution</span>
+        <span class="val">3024 × 4032</span>
+      </div>
+      <div class="spec-row">
+        <span class="key">EXIF Model</span>
+        <span class="val">Ray-Ban Meta 2</span>
+      </div>
+    </div>
+  </section>
+
+  <p class="footer-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+    Processed entirely on your device. Nothing is uploaded.
+  </p>
+
+</div>
+
+<!-- Hidden file input (must not use display:none — iOS blocks programmatic click) -->
+<input id="fileInput" class="file-input-hidden" type="file" accept="image/jpeg,.jpg,.jpeg,image/heic,image/heif,.heic,.heif" tabindex="-1" aria-hidden="true">
+
+<script>
+const $ = id => document.getElementById(id);
+const dropZone = $("dropZone");
+const fileInput = $("fileInput");
+const previewContainer = $("previewContainer");
+const preview = $("preview");
+const previewTag = $("previewTag");
+const uploadTitle = $("uploadTitle");
+const uploadSub = $("uploadSub");
+const allInOneBtn = $("allInOneBtn");
+const copyBtn = $("copyBtn");
+const saveBtn = $("saveBtn");
+const status = $("status");
+const allInOneText = $("allInOneText");
+const fitHint = $("fitHint");
+const fitOptions = document.querySelectorAll(".fit-option");
+
+let sourceDataUrl = null;
+let finalDataUrl = null;
+let pureBase64 = null;
+let fitMode = "cover";
+let sourceWidth = 0;
+let sourceHeight = 0;
+
+const ICONS = {
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+};
+
+dropZone.addEventListener("click", () => {
+  fileInput.value = "";
+  fileInput.click();
+});
+dropZone.addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    fileInput.click();
+  }
+});
+
+dropZone.addEventListener("dragover", e => {
+  e.preventDefault();
+  dropZone.style.background = "var(--fill-secondary)";
+});
+dropZone.addEventListener("dragleave", () => {
+  dropZone.style.background = "";
+});
+dropZone.addEventListener("drop", e => {
+  e.preventDefault();
+  dropZone.style.background = "";
+  const file = e.dataTransfer.files?.[0];
+  if (file) void handleFile(file);
+});
+
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files?.[0];
+  if (file) void handleFile(file);
+});
+
+function handleDataUrl(dataUrl, name, sizeKb) {
+  sourceDataUrl = dataUrl;
+  preview.src = sourceDataUrl;
+  previewContainer.style.display = "block";
+  previewTag.textContent = "Source ready";
+  uploadTitle.textContent = name || "Photo selected";
+  uploadSub.textContent = `${sizeKb} KB — ready to convert`;
+
+  const probe = new Image();
+  probe.onload = () => {
+    sourceWidth = probe.naturalWidth;
+    sourceHeight = probe.naturalHeight;
+    uploadSub.textContent = `${sourceWidth}×${sourceHeight} · ${sizeKb} KB`;
+    updateFitHint();
+  };
+  probe.src = sourceDataUrl;
+
+  allInOneBtn.disabled = false;
+  allInOneText.textContent = "Convert, copy & save";
+  copyBtn.disabled = true;
+  saveBtn.disabled = true;
+  hideStatus();
+}
+
+function aspectLabel(w, h) {
+  const ratio = w / h;
+  if (Math.abs(ratio - 9 / 16) < 0.02) return "9:16";
+  if (Math.abs(ratio - 3 / 4) < 0.02) return "3:4";
+  if (Math.abs(ratio - 4 / 3) < 0.02) return "4:3";
+  return null;
+}
+
+function updateFitHint() {
+  if (!sourceWidth || !sourceHeight) return;
+
+  const srcLabel = `${sourceWidth}×${sourceHeight}`;
+  const ratioLabel = aspectLabel(sourceWidth, sourceHeight);
+  const srcAspect = sourceWidth / sourceHeight;
+  const dstAspect = 3024 / 4032;
+
+  if (Math.abs(srcAspect - dstAspect) < 0.01) {
+    fitHint.textContent = `${srcLabel} is already 3:4 — no cropping or bars needed.`;
+    return;
+  }
+
+  const ratioText = ratioLabel ? `${ratioLabel} (${srcLabel})` : srcLabel;
+
+  if (fitMode === "cover") {
+    fitHint.textContent = `${ratioText} → center-cropped to 3:4. Best for realistic Meta Glasses photos.`;
+  } else {
+    fitHint.textContent = `${ratioText} → entire image kept, black bars added on the sides.`;
+  }
+}
+
+fitOptions.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    fitMode = btn.dataset.fit;
+    fitOptions.forEach((option) => {
+      const active = option === btn;
+      option.classList.toggle("active", active);
+      option.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    updateFitHint();
+  });
+});
+
+function isJpeg(file) {
+  return file.type === "image/jpeg" || /\.jpe?g$/i.test(file.name || "");
+}
+
+function isHeic(file) {
+  const type = (file.type || "").toLowerCase();
+  const name = (file.name || "").toLowerCase();
+  return (
+    type === "image/heic" ||
+    type === "image/heif" ||
+    /\.heic$/i.test(name) ||
+    /\.heif$/i.test(name)
+  );
+}
+
+async function isHeicFile(file) {
+  if (isHeic(file)) return true;
+  if (typeof HeicTo?.isHeic === "function") {
+    try {
+      return await HeicTo.isHeic(file);
+    } catch (_) {
+      return false;
+    }
+  }
+  return false;
+}
+
+function blobToDataUrl(blob, name, sizeBytes) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    handleDataUrl(
+      e.target.result,
+      name || "Photo selected",
+      (sizeBytes / 1024).toFixed(1)
+    );
+  };
+  reader.readAsDataURL(blob);
+}
+
+async function tryNativeHeicDecode(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    if (typeof createImageBitmap === "function") {
+      const bitmap = await createImageBitmap(file);
+      const canvas = document.createElement("canvas");
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+      canvas.getContext("2d").drawImage(bitmap, 0, 0);
+      bitmap.close?.();
+      return await canvasToJpegBlob(canvas);
+    }
+
+    const img = await new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = () => reject(new Error("Native HEIC decode failed"));
+      image.src = url;
+    });
+
+    const canvas = document.createElement("canvas");
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    canvas.getContext("2d").drawImage(img, 0, 0);
+    return await canvasToJpegBlob(canvas);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+function canvasToJpegBlob(canvas) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => (blob ? resolve(blob) : reject(new Error("JPEG encode failed"))),
+      "image/jpeg",
+      0.92
+    );
+  });
+}
+
+async function heicToJpegBlob(file) {
+  try {
+    return await tryNativeHeicDecode(file);
+  } catch (_) {
+    // Fall through to WASM decoder for Chrome, Firefox, and newer HEIC variants.
+  }
+
+  if (typeof HeicTo === "undefined") {
+    throw new Error("HEIC decoder failed to load.");
+  }
+
+  return await HeicTo({
+    blob: file,
+    type: "image/jpeg",
+    quality: 0.92,
+  });
+}
+
+async function handleFile(file) {
+  const heic = await isHeicFile(file);
+
+  if (!heic && !isJpeg(file)) {
+    showStatus("Please select a JPG, JPEG, or HEIC image.", "error");
+    return;
+  }
+
+  if (heic) {
+    allInOneBtn.disabled = true;
+    showStatus("Converting HEIC to JPEG…", "loading", true);
+    heicToJpegBlob(file)
+      .then((jpegBlob) => {
+        blobToDataUrl(jpegBlob, file.name, jpegBlob.size);
+      })
+      .catch((err) => {
+        console.error(err);
+        const detail = err?.message ? ` (${err.message})` : "";
+        showStatus(`HEIC conversion failed${detail}. Try another photo or export as JPG.`, "error");
+        allInOneBtn.disabled = !sourceDataUrl;
+      });
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    handleDataUrl(
+      e.target.result,
+      file.name || "Photo selected",
+      (file.size / 1024).toFixed(1)
+    );
+  };
+  reader.readAsDataURL(file);
+}
+
+function showStatus(message, type = "success", isLoading = false) {
+  status.className = `status ${type}`;
+  status.style.display = "flex";
+  if (isLoading) {
+    status.innerHTML = `<span class="status-icon"><span class="spinner"></span></span><span>${message}</span>`;
+  } else {
+    const icon = type === "success" ? ICONS.check : ICONS.x;
+    status.innerHTML = `<span class="status-icon">${icon}</span><span>${message}</span>`;
+  }
+}
+
+function hideStatus() {
+  status.style.display = "none";
+}
+
+function readOrientation(dataUrl) {
+  try {
+    const exif = piexif.load(dataUrl);
+    return exif["0th"][piexif.ImageIFD.Orientation] || 1;
+  } catch (e) {
+    return 1;
+  }
+}
+
+function drawCorrected(dataUrl, targetW, targetH, orientation, mode = "cover") {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const rotate90 = orientation >= 5 && orientation <= 8;
+      const orientedW = rotate90 ? img.height : img.width;
+      const orientedH = rotate90 ? img.width : img.height;
+
+      // Step 1: bake EXIF orientation into an upright bitmap
+      const upright = document.createElement("canvas");
+      upright.width = orientedW;
+      upright.height = orientedH;
+      const uprightCtx = upright.getContext("2d");
+
+      switch (orientation) {
+        case 2: uprightCtx.transform(-1, 0, 0, 1, img.width, 0); break;
+        case 3: uprightCtx.transform(-1, 0, 0, -1, img.width, img.height); break;
+        case 4: uprightCtx.transform(1, 0, 0, -1, 0, img.height); break;
+        case 5: uprightCtx.transform(0, 1, 1, 0, 0, 0); break;
+        case 6: uprightCtx.transform(0, 1, -1, 0, img.height, 0); break;
+        case 7: uprightCtx.transform(0, -1, -1, 0, img.height, img.width); break;
+        case 8: uprightCtx.transform(0, -1, 1, 0, 0, img.width); break;
+      }
+      uprightCtx.drawImage(img, 0, 0);
+
+      // Step 2: fit into 3024×4032 without stretching
+      const canvas = document.createElement("canvas");
+      canvas.width = targetW;
+      canvas.height = targetH;
+      const ctx = canvas.getContext("2d");
+
+      const srcAspect = orientedW / orientedH;
+      const dstAspect = targetW / targetH;
+
+      if (mode === "contain") {
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, targetW, targetH);
+        const scale = Math.min(targetW / orientedW, targetH / orientedH);
+        const drawW = orientedW * scale;
+        const drawH = orientedH * scale;
+        const offsetX = (targetW - drawW) / 2;
+        const offsetY = (targetH - drawH) / 2;
+        ctx.drawImage(upright, 0, 0, orientedW, orientedH, offsetX, offsetY, drawW, drawH);
+      } else {
+        let sx, sy, sWidth, sHeight;
+
+        if (srcAspect > dstAspect) {
+          sHeight = orientedH;
+          sWidth = orientedH * dstAspect;
+          sx = (orientedW - sWidth) / 2;
+          sy = 0;
+        } else {
+          sWidth = orientedW;
+          sHeight = orientedW / dstAspect;
+          sx = 0;
+          sy = (orientedH - sHeight) / 2;
+        }
+
+        ctx.drawImage(upright, sx, sy, sWidth, sHeight, 0, 0, targetW, targetH);
+      }
+
+      resolve(canvas.toDataURL("image/jpeg", 0.95));
+    };
+    img.onerror = reject;
+    img.src = dataUrl;
+  });
+}
+
+function buildExif(dataUrl) {
+  let exif;
+  try {
+    exif = piexif.load(dataUrl);
+  } catch (e) {
+    exif = { "0th": {}, "Exif": {}, "GPS": {}, "1st": {}, "thumbnail": null };
+  }
+
+  exif["GPS"] = {};
+  delete exif["0th"][piexif.ImageIFD.Software];
+  delete exif["0th"][piexif.ImageIFD.HostComputer];
+
+  delete exif["Exif"][piexif.ExifIFD.MakerNote];
+  delete exif["Exif"][piexif.ExifIFD.LensMake];
+  delete exif["Exif"][piexif.ExifIFD.LensModel];
+  delete exif["Exif"][piexif.ExifIFD.LensSpecification];
+
+  exif["0th"][piexif.ImageIFD.Make] = "Meta AI";
+  exif["0th"][piexif.ImageIFD.Model] = "Ray-Ban Meta Smart Glasses 2";
+  exif["0th"][piexif.ImageIFD.Orientation] = 1;
+  exif["Exif"][piexif.ExifIFD.ColorSpace] = 1;
+  exif["Exif"][piexif.ExifIFD.PixelXDimension] = 3024;
+  exif["Exif"][piexif.ExifIFD.PixelYDimension] = 4032;
+  return exif;
+}
+
+function dataUrlToBlob(dataUrl) {
+  const arr = dataUrl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1] || 'image/jpeg';
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+}
+
+async function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return true;
+  }
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  const ok = document.execCommand("copy");
+  ta.remove();
+  return ok;
+}
+
+async function saveOrShareImage(dataUrl, filename = "meta-glasses-converted.jpg") {
+  const blob = dataUrlToBlob(dataUrl);
+  const file = new File([blob], filename, { type: "image/jpeg" });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: "Meta Glasses Photo",
+        text: "Converted Ray-Ban Meta Glasses 3024×4032"
+      });
+      return { method: "share" };
+    } catch (err) {
+      if (err.name === "AbortError") return { method: "cancelled" };
+    }
+  }
+
+  const blobUrl = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.style.display = "none";
+  a.href = blobUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    URL.revokeObjectURL(blobUrl);
+    a.remove();
+  }, 4000);
+  return { method: "download" };
+}
+
+async function convertImage() {
+  const orientation = readOrientation(sourceDataUrl);
+  const corrected = await drawCorrected(sourceDataUrl, 3024, 4032, orientation, fitMode);
+  const exif = buildExif(sourceDataUrl);
+  const exifBytes = piexif.dump(exif);
+  finalDataUrl = piexif.insert(exifBytes, corrected);
+  pureBase64 = finalDataUrl.split(",")[1];
+  return { finalDataUrl, pureBase64 };
+}
+
+allInOneBtn.addEventListener("click", async () => {
+  if (!sourceDataUrl) {
+    fileInput.click();
+    return;
+  }
+
+  allInOneBtn.disabled = true;
+  showStatus("Converting to 3024×4032…", "loading", true);
+
+  try {
+    const { finalDataUrl: converted, pureBase64: b64 } = await convertImage();
+
+    preview.src = converted;
+    previewTag.textContent = "3024×4032";
+
+    let copied = false;
+    try {
+      await copyText(b64);
+      copied = true;
+    } catch (e) {
+      console.warn(e);
+    }
+
+    const result = await saveOrShareImage(converted);
+
+    copyBtn.disabled = false;
+    saveBtn.disabled = false;
+
+    if (result.method === "share") {
+      showStatus("Base64 copied. Share sheet opened — tap Save Image.", "success");
+    } else if (result.method === "cancelled") {
+      showStatus("Converted. Base64 copied to clipboard.", "success");
+    } else {
+      showStatus("Converted and downloaded. Base64 copied to clipboard.", "success");
+    }
+  } catch (err) {
+    console.error(err);
+    showStatus("Conversion failed. Try another JPG or HEIC.", "error");
+  } finally {
+    allInOneBtn.disabled = false;
+  }
+});
+
+copyBtn.addEventListener("click", async () => {
+  if (!pureBase64) return;
+  try {
+    await copyText(pureBase64);
+    showStatus("Base64 copied to clipboard.", "success");
+  } catch (e) {
+    showStatus("Clipboard access restricted by browser.", "error");
+  }
+});
+
+saveBtn.addEventListener("click", async () => {
+  if (!finalDataUrl) return;
+  await saveOrShareImage(finalDataUrl);
+  showStatus("Save triggered. You can also tap and hold the preview.", "success");
+});
+</script>
+</body>
+</html>
