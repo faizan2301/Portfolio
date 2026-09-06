@@ -20,7 +20,7 @@ const socialLinks = [
   { icon: Github, href: "https://github.com/faizan2301", label: "GitHub" },
   { icon: Linkedin, href: "https://linkedin.com/in/engineerfaizanshaikh", label: "LinkedIn" },
   { icon: Mail, href: "mailto:hello@faizanshaikh.dev", label: "Email" },
-  { icon: ExternalLink, href: "https://engineer-faizan-shaikh.vercel.app", label: "Portfolio" },
+  { icon: ExternalLink, href: "https://www.faizanshaikh.dev/en", label: "Portfolio" },
 ];
 
 export default function Footer() {
