@@ -43,7 +43,7 @@ export default function Contact() {
   const socialLinks = [
     { icon: Github, label: t("github"), href: "https://github.com/faizan2301", username: "@faizan2301" },
     { icon: Linkedin, label: t("linkedin"), href: "https://linkedin.com/in/engineerfaizanshaikh", username: "engineerfaizanshaikh" },
-    { icon: ExternalLink, label: t("portfolio"), href: "https://engineer-faizan-shaikh.vercel.app", username: "engineer-faizan-shaikh" },
+    { icon: ExternalLink, label: t("portfolio"), href: "https://www.faizanshaikh.dev/en", username: "faizanshaikh.dev" },
   ];
 
   const resetTurnstile = useCallback(() => {
