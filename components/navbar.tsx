@@ -146,10 +146,7 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.4 }}
+      <header
         className={cn(
           "fixed top-0 start-0 end-0 z-50 transition-all duration-150",
           isScrolled || !isHome ? "glass-nav py-3" : "py-4 bg-transparent"
@@ -227,7 +224,7 @@ export default function Navbar() {
             </button>
           </div>
         </nav>
-      </motion.header>
+      </header>
 
       <AnimatePresence>
         {isMobileMenuOpen && (

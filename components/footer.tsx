@@ -69,7 +69,7 @@ export default function Footer() {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-label text-xs uppercase tracking-[0.2em] text-primary">{t("quickLinks")}</h4>
+            <p className="font-label text-xs uppercase tracking-[0.2em] text-primary">{t("quickLinks")}</p>
             <nav className="flex flex-wrap gap-x-4 gap-y-2">
               {navLinks.map((link) =>
                 link.isRoute ? (
@@ -95,7 +95,7 @@ export default function Footer() {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-label text-xs uppercase tracking-[0.2em] text-primary">{t("connect")}</h4>
+            <p className="font-label text-xs uppercase tracking-[0.2em] text-primary">{t("connect")}</p>
             <div className="flex gap-2">
               {socialLinks.map((link) => (
                 <a

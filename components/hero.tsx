@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useCallback, lazy, Suspense } from "react";
 import { ArrowDown, Download, Terminal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import InteractiveKeyboard from "./interactive-keyboard";
 import { CyberButton } from "./ui/cyber-button";
 import { cn } from "@/lib/utils";
+
+const InteractiveKeyboard = lazy(() => import("./interactive-keyboard"));
 
 function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -103,45 +103,6 @@ function TypewriterHeading() {
   const isArabic = locale === "ar";
   const fullText = t("greeting");
   const nameText = t("name");
-  const [displayedName, setDisplayedName] = useState("");
-  const [showName, setShowName] = useState(false);
-
-  useEffect(() => {
-    setDisplayedName("");
-    setShowName(false);
-
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    // Arabic cursive shaping breaks if letters are revealed one-by-one or spaced apart
-    if (isArabic) {
-      if (prefersReducedMotion) {
-        setDisplayedName(nameText);
-        setShowName(true);
-        return;
-      }
-      const timeout = setTimeout(() => {
-        setDisplayedName(nameText);
-        setShowName(true);
-      }, 400);
-      return () => clearTimeout(timeout);
-    }
-
-    if (prefersReducedMotion) {
-      setDisplayedName(nameText);
-      return;
-    }
-
-    let index = 0;
-    const startDelay = setTimeout(() => {
-      const interval = setInterval(() => {
-        index++;
-        setDisplayedName(nameText.slice(0, index));
-        if (index >= nameText.length) clearInterval(interval);
-      }, 100);
-    }, 500);
-
-    return () => clearTimeout(startDelay);
-  }, [nameText, isArabic]);
 
   return (
     <h1
@@ -149,22 +110,20 @@ function TypewriterHeading() {
         "text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 sm:mb-6 font-heading leading-tight",
         isArabic ? "tracking-normal normal-case" : "uppercase tracking-widest"
       )}
-      data-text={`${fullText}${displayedName}`}
+      data-text={`${fullText}${nameText}`}
     >
       <span className="text-foreground">{fullText}</span>
       <span
         className={cn(
           "gradient-text-accent inline-block",
-          isArabic ? "hero-name-ar" : "cyber-glitch",
-          isArabic && showName && "hero-name-ar-visible"
+          isArabic ? "hero-name-ar hero-name-ar-visible" : "cyber-glitch"
         )}
-        data-text={displayedName}
+        data-text={nameText}
         lang={isArabic ? "ar" : undefined}
         dir={isArabic ? "rtl" : undefined}
       >
-        {displayedName}
+        {nameText}
       </span>
-      {!isArabic && <span className="typewriter-cursor" />}
     </h1>
   );
 }
@@ -264,47 +223,25 @@ export default function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pt-24 sm:pt-28 pb-16">
         <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-10 lg:gap-16 items-center">
           <div className="text-center lg:text-start">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="inline-flex items-center gap-2 section-badge mb-6 sm:mb-8"
-            >
+            <div className="inline-flex items-center gap-2 section-badge mb-6 sm:mb-8">
               <span className="w-2 h-2 bg-primary animate-pulse" style={{ boxShadow: "var(--box-shadow-neon-sm)" }} />
               <span className="font-label text-xs tracking-[0.2em]">{t("available")}</span>
-            </motion.div>
+            </div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-              <TypewriterHeading />
-            </motion.div>
+            <TypewriterHeading />
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="font-heading text-base sm:text-xl md:text-2xl text-muted-foreground mb-4 uppercase tracking-wide"
-            >
+            <p className="font-heading text-base sm:text-xl md:text-2xl text-muted-foreground mb-4 uppercase tracking-wide">
               {t("role")}
-            </motion.p>
+            </p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-8 tracking-wide leading-relaxed font-mono"
-            >
+            <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-8 tracking-wide leading-relaxed font-mono">
               {"> "}{t("taglinePrefix")}{" "}
               <span className="neon-text">{t("taglineFlutter")}</span>,{" "}
               <span className="neon-text-tertiary">{t("taglineRn")}</span>
               {t("taglineSuffix")}
-            </motion.p>
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3 sm:gap-4 mb-8"
-            >
+            <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3 sm:gap-4 mb-8">
               <CyberButton
                 href="#projects"
                 variant="glitch"
@@ -320,54 +257,48 @@ export default function Hero() {
                 <Download size={16} strokeWidth={1.5} />
                 {t("downloadCv")}
               </CyberButton>
-            </motion.div>
+            </div>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3">
-              {techStack.map((tech, i) => (
-                <motion.span
-                  key={tech}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.4 + i * 0.08 }}
-                  className="tech-pill px-3 py-1.5 text-muted-foreground"
-                >
+              {techStack.map((tech) => (
+                <span key={tech} className="tech-pill px-3 py-1.5 text-muted-foreground">
                   {tech}
-                </motion.span>
+                </span>
               ))}
             </div>
           </div>
 
           <div className="flex flex-col items-center gap-6 -rotate-1 lg:rotate-0">
             <HeroHUD />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.2 }}
-              className="w-full flex justify-center"
-            >
+            <div className="w-full flex justify-center min-h-[220px] sm:min-h-[280px]">
               <TiltCard>
                 <div className="cyber-card-holo p-3 sm:p-4">
-                  <InteractiveKeyboard />
+                  <Suspense
+                    fallback={
+                      <div
+                        className="w-[280px] sm:w-[360px] h-[200px] sm:h-[260px] bg-secondary/40"
+                        aria-hidden="true"
+                      />
+                    }
+                  >
+                    <InteractiveKeyboard />
+                  </Suspense>
                 </div>
               </TiltCard>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
 
-      <motion.button
+      <button
+        type="button"
         onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
         className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors font-label text-xs tracking-[0.2em] uppercase"
         aria-label={t("scrollAria")}
       >
         <span>{t("scroll")}</span>
-        <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-          <ArrowDown size={18} strokeWidth={1.5} />
-        </motion.div>
-      </motion.button>
+        <ArrowDown size={18} strokeWidth={1.5} className="animate-bounce" />
+      </button>
     </section>
   );
 }

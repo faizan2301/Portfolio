@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import LocaleHtmlAttrs from "@/components/locale-html-attrs";
 
-const siteUrl = "https://www.faizanshaikh.dev/en";
+const siteUrl = "https://www.faizanshaikh.dev";
 
 type Props = {
   children: React.ReactNode;
@@ -21,15 +21,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: "metadata" });
 
   const ogLocale = locale === "ar" ? "ar_OM" : "en_US";
+  const pageUrl = `${siteUrl}/${locale}`;
 
   return {
     title: {
-      default: t("title"),
+      absolute: t("title"),
       template: t("titleTemplate"),
     },
     description: t("description"),
     alternates: {
-      canonical: `${siteUrl}/${locale}`,
+      canonical: pageUrl,
       languages: {
         en: `${siteUrl}/en`,
         ar: `${siteUrl}/ar`,
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       type: "website",
       locale: ogLocale,
-      url: `${siteUrl}/${locale}`,
+      url: pageUrl,
       title: t("ogTitle"),
       description: t("ogDescription"),
       siteName: t("siteName"),
@@ -78,7 +79,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     "@type": "Person",
     name: "Mohammad Faizan Shaikh",
     alternateName: "Faizan Shaikh",
-    url: siteUrl,
+    url: `${siteUrl}/${locale}`,
     image: `${siteUrl}/og-image.png`,
     jobTitle: t("jobTitle"),
     description: t("jsonLdDescription"),

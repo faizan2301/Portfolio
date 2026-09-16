@@ -67,7 +67,7 @@ export default function About() {
                       fill
                       sizes="56px"
                       className="object-cover object-top"
-                      priority
+                      loading="lazy"
                     />
                   </div>
                   <div>
