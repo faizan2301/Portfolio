@@ -95,18 +95,6 @@ function Key({ label, sublabel, color = "default", size = "md", delay = 0 }: Key
 
   return (
     <motion.button
-      initial={{ opacity: 0, y: 30, rotateX: -15 }}
-      animate={{ 
-        opacity: 1, 
-        y: 0, 
-        rotateX: 0,
-      }}
-      transition={{ 
-        duration: 0.5, 
-        delay,
-        type: "spring",
-        stiffness: 100,
-      }}
       whileHover={{ 
         scale: 1.02,
       }}
@@ -218,9 +206,6 @@ function Mascot() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
       className="absolute -top-2 -left-2 w-12 h-12 sm:w-16 sm:h-16 hidden sm:block"
     >
       <motion.div
@@ -273,13 +258,7 @@ export default function InteractiveKeyboard() {
   }, []);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.3 }}
-      className="relative"
-      style={{ perspective: "1000px" }}
-    >
+    <div className="relative" style={{ perspective: "1000px" }}>
       {/* Mascot */}
       <Mascot />
       
@@ -354,6 +333,6 @@ export default function InteractiveKeyboard() {
           }}
         />
       ))}
-    </motion.div>
+    </div>
   );
 }

@@ -27,11 +27,12 @@ const jetbrainsMono = JetBrains_Mono({
 const notoSansArabic = Noto_Sans_Arabic({
   variable: "--font-arabic",
   subsets: ["arabic"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "700"],
   display: "swap",
+  preload: false,
 });
 
-const siteUrl = "https://www.faizanshaikh.dev/en";
+const siteUrl = "https://www.faizanshaikh.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -104,6 +105,32 @@ export const metadata: Metadata = {
     },
   },
   category: "technology",
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "Faizan Shaikh Portfolio",
+    title: "Faizan Shaikh | React Native & Flutter Developer",
+    description:
+      "React Native & Flutter developer building iOS, Android, and web apps for clients across Oman and the Gulf.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Faizan Shaikh — React Native & Flutter Developer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Faizan Shaikh | React Native & Flutter Developer",
+    description:
+      "React Native & Flutter developer building iOS, Android, and web apps for clients across Oman and the Gulf.",
+    images: ["/og-image.png"],
+  },
+  alternates: {
+    canonical: siteUrl,
+  },
 };
 
 export default function RootLayout({
@@ -113,6 +140,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" dir="ltr" className="scroll-smooth" suppressHydrationWarning>
+      <head>
+        <meta
+          name="description"
+          content="Faizan Shaikh — React Native & Flutter developer building iOS, Android, and web apps for clients across India, Oman and the Gulf."
+        />
+      </head>
       <body
         className={`${orbitron.variable} ${shareTech.variable} ${jetbrainsMono.variable} ${notoSansArabic.variable} antialiased`}
         suppressHydrationWarning
