@@ -81,6 +81,7 @@ export default function Navbar() {
     (l) => pathname === `/${l}` || pathname === `/${l}/`
   );
   const isTools = pathname.startsWith("/tools");
+  const isPlay = pathname.startsWith("/games");
   const homeBase = `/${locale}`;
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -130,6 +131,7 @@ export default function Navbar() {
 
   const isLinkActive = (href: string) => {
     if (href === "/tools") return isTools;
+    if (href === "/games/flag") return isPlay;
     if (!isHome) return false;
     return activeSection === href.substring(1);
   };
@@ -142,6 +144,7 @@ export default function Navbar() {
       hash: link.href,
     })),
     { name: t("tools"), href: "/tools", isRoute: true as const, hash: "/tools" },
+    { name: t("play"), href: "/games/flag", isRoute: true as const, hash: "/games/flag" },
   ];
 
   return (

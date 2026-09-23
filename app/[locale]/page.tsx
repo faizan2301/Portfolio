@@ -9,6 +9,7 @@ import Experience from "@/components/experience";
 import Projects from "@/components/projects";
 import Skills from "@/components/skills";
 import Contact from "@/components/contact";
+import FlagTeaser from "@/components/games/flag-teaser";
 import Footer from "@/components/footer";
 import ScrollProgress from "@/components/ui/scroll-progress";
 import CustomCursor from "@/components/ui/custom-cursor";
@@ -37,6 +38,7 @@ export default async function Home({ params }: Props) {
         <Experience />
         <Projects />
         <Skills />
+        <FlagTeaser />
         <Contact />
       </main>
       <Footer />

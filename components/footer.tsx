@@ -47,6 +47,7 @@ export default function Footer() {
       isRoute: false as const,
     })),
     { name: tNav("tools"), href: "/tools", hash: "/tools", isRoute: true as const },
+    { name: tNav("play"), href: "/games/flag", hash: "/games/flag", isRoute: true as const },
   ];
 
   return (
