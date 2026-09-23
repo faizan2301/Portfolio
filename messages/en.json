@@ -18,6 +18,7 @@
     "skills": "Skills",
     "contact": "Contact",
     "tools": "Tools",
+    "play": "Play",
     "toggleMenu": "Toggle menu",
     "navSys": "NAV.SYS",
     "switchToEn": "EN",
@@ -261,6 +262,12 @@
     "errorGeneric": "Failed to send message.",
     "errorTurnstileLoad": "Security check failed to load. Please refresh and try again.",
     "turnstileMissing": "Turnstile site key missing — add NEXT_PUBLIC_TURNSTILE_SITE_KEY to enable the form."
+  },
+  "playground": {
+    "badge": "// Side quest",
+    "title": "Flag Challenge",
+    "body": "A new flag every round. Six attempts to name the country.",
+    "cta": "Play game"
   },
   "footer": {
     "tagline": "Frontend Engineer & Mobile Developer crafting seamless digital experiences.",

@@ -18,6 +18,7 @@
     "skills": "المهارات",
     "contact": "تواصل",
     "tools": "الأدوات",
+    "play": "العب",
     "toggleMenu": "فتح القائمة",
     "navSys": "NAV.SYS",
     "switchToEn": "EN",
@@ -261,6 +262,12 @@
     "errorGeneric": "فشل إرسال الرسالة.",
     "errorTurnstileLoad": "فشل تحميل التحقق الأمني. يرجى تحديث الصفحة والمحاولة.",
     "turnstileMissing": "مفتاح Turnstile غير موجود — أضف NEXT_PUBLIC_TURNSTILE_SITE_KEY لتفعيل النموذج."
+  },
+  "playground": {
+    "badge": "// جولة جانبية",
+    "title": "تحدي الأعلام",
+    "body": "علم جديد في كل جولة. ست محاولات لمعرفة الدولة.",
+    "cta": "ابدأ اللعب"
   },
   "footer": {
     "tagline": "مهندس واجهات أمامية ومطور جوال أصنع تجارب رقمية سلسة.",
